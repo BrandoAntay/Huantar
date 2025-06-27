@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useAnimals } from "@/hooks/useAdminData";
 
 interface Animal {
   id: number;
@@ -13,111 +14,21 @@ interface Animal {
 
 export const ZooSection = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(
+    null,
+  );
   const animalsPerPage = 6;
+  const { animals: adminAnimals } = useAnimals();
 
-  const allAnimals: Animal[] = [
-    {
-      id: 1,
-      name: "León Africano",
-      scientificName: "Panthera leo",
-      description:
-        "El rey de la sabana, conocido por su melena majestuosa y rugido poderoso que puede escucharse a kilómetros de distancia.",
-      image: "/placeholder.svg",
-    },
-    {
-      id: 2,
-      name: "Jaguar",
-      scientificName: "Panthera onca",
-      description:
-        "El felino más grande de América, excelente nadador y con la mordida más poderosa entre todos los grandes felinos.",
-      image: "/placeholder.svg",
-    },
-    {
-      id: 3,
-      name: "Oso de Anteojos",
-      scientificName: "Tremarctos ornatus",
-      description:
-        "Único oso nativo de Sudamérica, habita en los bosques andinos y es conocido por las marcas alrededor de sus ojos.",
-      image: "/placeholder.svg",
-    },
-    {
-      id: 4,
-      name: "Cóndor Andino",
-      scientificName: "Vultur gryphus",
-      description:
-        "Ave nacional del Perú, una de las aves voladoras más grandes del mundo con una envergadura de hasta 3 metros.",
-      image: "/placeholder.svg",
-    },
-    {
-      id: 5,
-      name: "Vicuña",
-      scientificName: "Vicugna vicugna",
-      description:
-        "Camélido sudamericano que produce la fibra más fina del mundo, símbolo de la fauna andina peruana.",
-      image: "/placeholder.svg",
-    },
-    {
-      id: 6,
-      name: "Mono Choro",
-      scientificName: "Lagothrix lagotricha",
-      description:
-        "Primate endémico de la Amazonía peruana, conocido por su cola prensil y comportamiento social complejo.",
-      image: "/placeholder.svg",
-    },
-    {
-      id: 7,
-      name: "Puma",
-      scientificName: "Puma concolor",
-      description:
-        "Felino americano de gran adaptabilidad, capaz de vivir desde el nivel del mar hasta los 5,800 metros de altura.",
-      image: "/placeholder.svg",
-    },
-    {
-      id: 8,
-      name: "Otorongo",
-      scientificName: "Panthera onca",
-      description:
-        "Jaguar amazónico, depredador apex de la selva peruana con un patrón único de rosetas en su pelaje.",
-      image: "/placeholder.svg",
-    },
-    {
-      id: 9,
-      name: "Boa Esmeralda",
-      scientificName: "Corallus caninus",
-      description:
-        "Serpiente no venenosa de la Amazonía, conocida por su hermoso color verde esmeralda y hábitos arbóreos.",
-      image: "/placeholder.svg",
-    },
-    {
-      id: 10,
-      name: "Tucán",
-      scientificName: "Ramphastos tucanus",
-      description:
-        "Ave tropical caracterizada por su colorido pico grande, importante dispersor de semillas en la selva.",
-      image: "/placeholder.svg",
-    },
-    {
-      id: 11,
-      name: "Perezoso",
-      scientificName: "Bradypus tridactylus",
-      description:
-        "Mamífero arbóreo de movimientos lentos, adaptado perfectamente a la vida en las copas de los árboles.",
-      image: "/placeholder.svg",
-    },
-    {
-      id: 12,
-      name: "Tapir",
-      scientificName: "Tapirus terrestris",
-      description:
-        "Mamífero herbívoro considerado un 'fósil viviente', importante para la dispersión de semillas en la Amazonía.",
-      image: "/placeholder.svg",
-    },
-  ];
+  // Filtrar solo los animales activos
+  const allAnimals: Animal[] = adminAnimals.filter((animal) => animal.active);
 
   const totalPages = Math.ceil(allAnimals.length / animalsPerPage);
   const startIndex = (currentPage - 1) * animalsPerPage;
-  const currentAnimals = allAnimals.slice(startIndex, startIndex + animalsPerPage);
+  const currentAnimals = allAnimals.slice(
+    startIndex,
+    startIndex + animalsPerPage,
+  );
 
   const goToPage = (page: number) => {
     setCurrentPage(page);
@@ -206,7 +117,7 @@ export const ZooSection = () => {
                     "w-10 h-10 p-0 text-sm",
                     currentPage === pageNumber
                       ? "bg-park-blue hover:bg-park-blue/90 text-white"
-                      : "hover:bg-park-blue/10 text-park-blue"
+                      : "hover:bg-park-blue/10 text-park-blue",
                   )}
                 >
                   {pageNumber}
