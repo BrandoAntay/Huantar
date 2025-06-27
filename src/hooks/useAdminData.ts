@@ -1,0 +1,261 @@
+import { useState, useEffect } from "react";
+import {
+  adminStorage,
+  type AdminData,
+  type HeroSlide,
+  type Wonder,
+  type Animal,
+  type PriceOption,
+  type GroupImage,
+  type MapData,
+} from "@/lib/adminStorage";
+
+export function useAdminAuth() {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const auth = adminStorage.getAuth();
+    setIsAuthenticated(auth);
+    setLoading(false);
+  }, []);
+
+  const login = (email: string, password: string): boolean => {
+    // Credenciales hardcodeadas para demo
+    if (email === "admin@parque.com" && password === "admin123") {
+      adminStorage.setAuth(true);
+      setIsAuthenticated(true);
+      return true;
+    }
+    return false;
+  };
+
+  const logout = () => {
+    adminStorage.clearAuth();
+    setIsAuthenticated(false);
+  };
+
+  return { isAuthenticated, loading, login, logout };
+}
+
+export function useAdminData() {
+  const [data, setData] = useState<AdminData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const refreshData = () => {
+    const adminData = adminStorage.getData();
+    setData(adminData);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    refreshData();
+  }, []);
+
+  return { data, loading, refreshData };
+}
+
+export function useHeroSlides() {
+  const [slides, setSlides] = useState<HeroSlide[]>([]);
+
+  const refresh = () => {
+    setSlides(adminStorage.getHeroSlides());
+  };
+
+  useEffect(() => {
+    refresh();
+  }, []);
+
+  const add = (slide: Omit<HeroSlide, "id">) => {
+    adminStorage.addHeroSlide(slide);
+    refresh();
+  };
+
+  const update = (id: number, slide: Partial<HeroSlide>) => {
+    adminStorage.updateHeroSlide(id, slide);
+    refresh();
+  };
+
+  const remove = (id: number) => {
+    adminStorage.deleteHeroSlide(id);
+    refresh();
+  };
+
+  const toggleActive = (id: number) => {
+    const slide = slides.find((s) => s.id === id);
+    if (slide) {
+      update(id, { active: !slide.active });
+    }
+  };
+
+  return { slides, add, update, remove, toggleActive, refresh };
+}
+
+export function useWonders() {
+  const [wonders, setWonders] = useState<Wonder[]>([]);
+
+  const refresh = () => {
+    setWonders(adminStorage.getWonders());
+  };
+
+  useEffect(() => {
+    refresh();
+  }, []);
+
+  const add = (wonder: Omit<Wonder, "id">) => {
+    adminStorage.addWonder(wonder);
+    refresh();
+  };
+
+  const update = (id: number, wonder: Partial<Wonder>) => {
+    adminStorage.updateWonder(id, wonder);
+    refresh();
+  };
+
+  const remove = (id: number) => {
+    adminStorage.deleteWonder(id);
+    refresh();
+  };
+
+  const toggleActive = (id: number) => {
+    const wonder = wonders.find((w) => w.id === id);
+    if (wonder) {
+      update(id, { active: !wonder.active });
+    }
+  };
+
+  return { wonders, add, update, remove, toggleActive, refresh };
+}
+
+export function useAnimals() {
+  const [animals, setAnimals] = useState<Animal[]>([]);
+
+  const refresh = () => {
+    setAnimals(adminStorage.getAnimals());
+  };
+
+  useEffect(() => {
+    refresh();
+  }, []);
+
+  const add = (animal: Omit<Animal, "id">) => {
+    adminStorage.addAnimal(animal);
+    refresh();
+  };
+
+  const update = (id: number, animal: Partial<Animal>) => {
+    adminStorage.updateAnimal(id, animal);
+    refresh();
+  };
+
+  const remove = (id: number) => {
+    adminStorage.deleteAnimal(id);
+    refresh();
+  };
+
+  const toggleActive = (id: number) => {
+    const animal = animals.find((a) => a.id === id);
+    if (animal) {
+      update(id, { active: !animal.active });
+    }
+  };
+
+  return { animals, add, update, remove, toggleActive, refresh };
+}
+
+export function usePriceOptions() {
+  const [priceOptions, setPriceOptions] = useState<PriceOption[]>([]);
+
+  const refresh = () => {
+    setPriceOptions(adminStorage.getPriceOptions());
+  };
+
+  useEffect(() => {
+    refresh();
+  }, []);
+
+  const add = (option: Omit<PriceOption, "id">) => {
+    adminStorage.addPriceOption(option);
+    refresh();
+  };
+
+  const update = (id: number, option: Partial<PriceOption>) => {
+    adminStorage.updatePriceOption(id, option);
+    refresh();
+  };
+
+  const remove = (id: number) => {
+    adminStorage.deletePriceOption(id);
+    refresh();
+  };
+
+  const toggleActive = (id: number) => {
+    const option = priceOptions.find((p) => p.id === id);
+    if (option) {
+      update(id, { active: !option.active });
+    }
+  };
+
+  return { priceOptions, add, update, remove, toggleActive, refresh };
+}
+
+export function useGroupImages() {
+  const [groupImages, setGroupImages] = useState<GroupImage[]>([]);
+
+  const refresh = () => {
+    setGroupImages(adminStorage.getGroupImages());
+  };
+
+  useEffect(() => {
+    refresh();
+  }, []);
+
+  const add = (image: Omit<GroupImage, "id">) => {
+    adminStorage.addGroupImage(image);
+    refresh();
+  };
+
+  const update = (id: number, image: Partial<GroupImage>) => {
+    adminStorage.updateGroupImage(id, image);
+    refresh();
+  };
+
+  const remove = (id: number) => {
+    adminStorage.deleteGroupImage(id);
+    refresh();
+  };
+
+  const toggleActive = (id: number) => {
+    const image = groupImages.find((i) => i.id === id);
+    if (image) {
+      update(id, { active: !image.active });
+    }
+  };
+
+  return { groupImages, add, update, remove, toggleActive, refresh };
+}
+
+export function useMapData() {
+  const [mapData, setMapData] = useState<MapData | null>(null);
+
+  const refresh = () => {
+    setMapData(adminStorage.getMapData());
+  };
+
+  useEffect(() => {
+    refresh();
+  }, []);
+
+  const update = (data: Partial<MapData>) => {
+    adminStorage.updateMapData(data);
+    refresh();
+  };
+
+  const toggleActive = () => {
+    if (mapData) {
+      update({ active: !mapData.active });
+    }
+  };
+
+  return { mapData, update, toggleActive, refresh };
+}
