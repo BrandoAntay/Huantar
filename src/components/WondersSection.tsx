@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { useWonders } from "@/hooks/useAdminData";
 
 /**
  * Interfaz para definir la estructura de una maravilla
@@ -27,42 +28,10 @@ export const WondersSection = () => {
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
   const [hasMoved, setHasMoved] = useState(false);
+  const { wonders: allWonders } = useWonders();
 
- // Datos de las maravillas del mundo
-  const wonders: Wonder[] = [
-    {
-      id: 1,
-      name: "Cristo Redentor",
-      image: "/placeholder.svg",
-      description: "Réplica del",
-      fullDescription:
-        "Contempla esta icónica estatua que se alza sobre la ciudad de Río de Janeiro. El Cristo Redentor es símbolo de fe y acogida, reconocido mundialmente como una de las nuevas maravillas del mundo.",
-    },
-    {
-      id: 2,
-      name: "Machu Picchu",
-      image: "/placeholder.svg",
-      description: "Réplica de",
-      fullDescription:
-        "Explora la ciudadela inca más famosa del mundo, suspendida entre las montañas de los Andes. Machu Picchu representa la cumbre de la ingeniería y espiritualidad de la civilización inca.",
-    },
-    {
-      id: 3,
-      name: "Gran Muralla China",
-      image: "/placeholder.svg",
-      description: "Réplica de la",
-      fullDescription:
-        "Recorre una sección de la fortificación más larga del mundo. La Gran Muralla China es testimonio del ingenio humano y la determinación de proteger una civilización milenaria.",
-    },
-        {
-      id: 4,
-      name: "Las Pirámides de Guiza",
-      image: "/placeholder.svg",
-      description: "Réplicas de",
-      fullDescription:
-        "Explora las majestuosas Pirámides de Guiza, construidas hace más de 4,500 años como tumbas para los faraones. Estas maravillas del mundo antiguo siguen desafiando al tiempo y revelando el misterio de una civilización que dominó la ingeniería, la astronomía y el arte con una precisión asombrosa.",
-    },
-  ];
+  // Filtrar solo las maravillas activas
+  const wonders: Wonder[] = allWonders.filter((wonder) => wonder.active);
 
   /**
    * Inicia el proceso de arrastre del carrusel
