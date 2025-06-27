@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useHeroSlides } from "@/hooks/useAdminData";
 
 /**
  * Carrusel principal de imágenes con información del parque
@@ -9,50 +10,10 @@ import { cn } from "@/lib/utils";
  */
 export const HeroCarousel = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const { slides: allSlides } = useHeroSlides();
 
-  // Datos de las imágenes del carrusel con información del parque
-  const slides = [
-    {
-      id: 1,
-      image: "/placeholder.svg",
-      subtitle: "Parque Zonal",
-      title: "CHAVIN DE HUANTAR",
-      description:
-        "Ven y descubre algunas de las 7 maravillas del mundo mientras te maravillas con la fauna que habita nuestro parque.",
-    },
-    {
-      id: 2,
-      image: "/placeholder.svg",
-      subtitle: "Estatuas Famosas",
-      title: "FOTOS EPICAS",
-      description:
-        "¡Conoce a nuestros personajes favoritos! Prepárate para vivir momentos únicos y llevarte los mejores recuerdos.",
-    },
-    {
-      id: 3,
-      image: "/placeholder.svg",
-      subtitle: "Centro Deportivo",
-      title: "RECREACIÓN FAMILIAR",
-      description:
-        "Demuestra tus habilidades en nuestra amplia loza deportiva, perfecta para partidos de fútbol, vóley y más.",
-    },
-    {
-      id: 4,
-      image: "/placeholder.svg",
-      subtitle: "Piscina Refrescante",
-      title: "UN CHAPUZÓN DE ALEGRÍA",
-      description:
-        "Sumérgete en la diversión. Nuestra piscina es el lugar perfecto para refrescarte y pasar momentos inolvidables",
-    },
-    {
-      id: 5,
-      image: "/placeholder.svg",
-      subtitle: "Paseos en Botes",
-      title: "NAVEGA Y RELÁJATE",
-      description:
-        "Relájate y navega en nuestros botes a pedal. Una experiencia tranquila rodeada de naturaleza.",
-    },
-  ];
+  // Filtrar solo los slides activos para mostrar en el carrusel
+  const slides = allSlides.filter((slide) => slide.active);
 
   /**
    * Efecto para cambio automático de slides cada 5 segundos
