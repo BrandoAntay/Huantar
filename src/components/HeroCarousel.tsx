@@ -15,7 +15,20 @@ export const HeroCarousel = () => {
   // Filtrar solo los slides activos para mostrar en el carrusel
   const slides = allSlides.filter((slide) => slide.active);
 
-  // Si no hay slides, no renderizar nada
+  /**
+   * Efecto para cambio automático de slides cada 5 segundos
+   */
+  useEffect(() => {
+    if (slides.length === 0) return;
+
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+
+    return () => clearInterval(timer);
+  }, [slides.length]);
+
+  // Si no hay slides, mostrar mensaje después de que todos los hooks se hayan ejecutado
   if (slides.length === 0) {
     return (
       <div className="h-screen w-full bg-gray-100 flex items-center justify-center">
@@ -30,17 +43,6 @@ export const HeroCarousel = () => {
       </div>
     );
   }
-
-  /**
-   * Efecto para cambio automático de slides cada 5 segundos
-   */
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000);
-
-    return () => clearInterval(timer);
-  }, [slides.length]);
 
   /**
    * Navega al slide anterior
