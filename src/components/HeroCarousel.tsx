@@ -15,6 +15,22 @@ export const HeroCarousel = () => {
   // Filtrar solo los slides activos para mostrar en el carrusel
   const slides = allSlides.filter((slide) => slide.active);
 
+  // Si no hay slides, no renderizar nada
+  if (slides.length === 0) {
+    return (
+      <div className="h-screen w-full bg-gray-100 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-600 mb-2">
+            No hay slides disponibles
+          </h2>
+          <p className="text-gray-500">
+            Configure slides en el panel de administración
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   /**
    * Efecto para cambio automático de slides cada 5 segundos
    */
