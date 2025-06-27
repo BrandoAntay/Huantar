@@ -19,7 +19,6 @@ export const HeroCarousel = () => {
       title: "CHAVIN DE HUANTAR",
       description:
         "Ven y descubre algunas de las 7 maravillas del mundo mientras te maravillas con la fauna que habita nuestro parque.",
-      buttonText: "Explora el Parque",
     },
     {
       id: 2,
@@ -28,7 +27,6 @@ export const HeroCarousel = () => {
       title: "FOTOS EPICAS",
       description:
         "¡Conoce a nuestros personajes favoritos! Prepárate para vivir momentos únicos y llevarte los mejores recuerdos.",
-      buttonText: "Explora el Parque",
     },
     {
       id: 3,
@@ -37,7 +35,6 @@ export const HeroCarousel = () => {
       title: "RECREACIÓN FAMILIAR",
       description:
         "Demuestra tus habilidades en nuestra amplia loza deportiva, perfecta para partidos de fútbol, vóley y más.",
-      buttonText: "Explora el Parque",
     },
     {
       id: 4,
@@ -46,7 +43,6 @@ export const HeroCarousel = () => {
       title: "UN CHAPUZÓN DE ALEGRÍA",
       description:
         "Sumérgete en la diversión. Nuestra piscina es el lugar perfecto para refrescarte y pasar momentos inolvidables",
-      buttonText: "Explora el Parque",
     },
     {
       id: 5,
@@ -55,7 +51,6 @@ export const HeroCarousel = () => {
       title: "NAVEGA Y RELÁJATE",
       description:
         "Relájate y navega en nuestros botes a pedal. Una experiencia tranquila rodeada de naturaleza.",
-      buttonText: "Explora el Parque",
     },
   ];
 
@@ -129,14 +124,6 @@ export const HeroCarousel = () => {
                 <p className="text-sm sm:text-lg mb-8 leading-relaxed opacity-90 max-w-xl">
                   {slide.description}
                 </p>
-
-                {/* Botón de acción */}
-                <Button
-                  size="lg"
-                  className="bg-park-orange hover:bg-park-orange-light text-white px-8 py-3 text-lg font-semibold rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg"
-                >
-                  {slide.buttonText}
-                </Button>
               </div>
             </div>
           </div>
