@@ -9,19 +9,35 @@ export function useVisitorCount() {
     const fetchCount = async () => {
       try {
         setLoading(true);
-        const res = await fetch("http://localhost:4000/api/boletas/count");
-        if (!res.ok) throw new Error("No se pudo obtener el contador");
-        const data = await res.json();
-        setCount(data.total);
+
+        // Simulate API call with mock data
+        await new Promise((resolve) => setTimeout(resolve, 800)); // Simulate network delay
+
+        // Generate a realistic visitor count (between 15,000 and 25,000)
+        const baseCount = 15000;
+        const randomExtra = Math.floor(Math.random() * 10000);
+        const mockCount = baseCount + randomExtra;
+
+        setCount(mockCount);
+        setError(null);
       } catch (e: any) {
         setError(e.message);
       } finally {
         setLoading(false);
       }
     };
+
     fetchCount();
-    // Opcional: Actualizar cada 10 segundos
-    const interval = setInterval(fetchCount, 10000);
+
+    // Update count every 30 seconds with small incremental changes
+    const interval = setInterval(() => {
+      setCount((prevCount) => {
+        // Small random increase (0-5 new visitors)
+        const increment = Math.floor(Math.random() * 6);
+        return prevCount + increment;
+      });
+    }, 30000);
+
     return () => clearInterval(interval);
   }, []);
 
