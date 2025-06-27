@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { usePriceOptions } from "@/hooks/useAdminData";
 
 /**
  * Interfaz para definir la estructura de un precio
@@ -19,59 +20,26 @@ interface PriceOption {
  * Muestra diferentes categorías de entrada con precios destacados
  */
 export const PricingSection = () => {
-  // Opciones de precios del parque
-  const priceOptions: PriceOption[] = [
-    {
-      id: 1,
-      price: 10,
-      category: "Adultos",
-      ageRange: "18 a 60 años",
-      description: "Acceso completo al parque y zoológico",
-    },
-    {
-      id: 2,
-      price: 5,
-      category: "Niños",
-      ageRange: "4 a 17 años",
-      description: "Entrada especial para menores",
-      popular: true,
-    },
-    {
-      id: 3,
-      price: 5,
-      category: "Tercera Edad",
-      ageRange: "60+ años",
-      description: "Tarifa preferencial para adultos mayores",
-    },
-    {
-      id: 4,
-      price: 5,
-      category: "Discapacitados",
-      ageRange: "18+ años",
-      description: "Descuento especial para discapacitados",
-    },
-    {
-      id: 5,
-      price: 5,
-      category: "Piscina Adulto",
-      ageRange: "18 a 60 años",
-      description: "Entrada para la piscina de adultos",
-    },
-    {
-      id: 6,
-      price: 5,
-      category: "Piscina Niños",
-      ageRange: "4 a 17 años",
-      description: "Entrada para la piscina de niños",
-    },
-  ];
+  const { priceOptions: adminPriceOptions } = usePriceOptions();
+
+  // Filtrar solo las opciones activas y mapear al formato correcto
+  const priceOptions: PriceOption[] = adminPriceOptions
+    .filter((option) => option.active)
+    .map((option) => ({
+      id: option.id,
+      price: option.price,
+      category: option.category,
+      ageRange: option.ageRange,
+      description: option.description,
+      popular: option.category === "Niños", // Mantener lógica de popular para niños
+    }));
 
   /**
    * Formatea el precio para mostrar
    */
-const formatPrice = (price: number) => {
-  return `S/ ${price.toFixed(1)}`;
-};
+  const formatPrice = (price: number) => {
+    return `S/ ${price.toFixed(1)}`;
+  };
 
   return (
     <section id="tarifario" className="py-16 bg-gray-50">
@@ -88,7 +56,7 @@ const formatPrice = (price: number) => {
           </p>
         </div>
         {/* * Autores: * - Samira Yamily Quispe Puma - Brando Lee Antay Corimaya
-        *Fecha: junio de 2025*/}
+         *Fecha: junio de 2025*/}
         {/* Grid de tarjetas de precios */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {priceOptions.map((option) => (
@@ -115,9 +83,9 @@ const formatPrice = (price: number) => {
                   className={cn(
                     "w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center",
                     "text-white font-bold text-lg shadow-lg transform transition-all duration-300",
-                    option.category === "Discapacitados" 
-                    ? "bg-park-green"
-                    : "bg-park-blue group-hover:bg-park-orange",
+                    option.category === "Discapacitados"
+                      ? "bg-park-green"
+                      : "bg-park-blue group-hover:bg-park-orange",
                   )}
                 >
                   {formatPrice(option.price)}
