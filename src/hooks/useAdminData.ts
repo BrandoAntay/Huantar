@@ -119,21 +119,36 @@ export function useWonders() {
 
   useEffect(() => {
     refresh();
+
+    const handleStorageChange = () => {
+      refresh();
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("adminDataChange", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("adminDataChange", handleStorageChange);
+    };
   }, []);
 
   const add = (wonder: Omit<Wonder, "id">) => {
     adminStorage.addWonder(wonder);
     refresh();
+    window.dispatchEvent(new CustomEvent("adminDataChange"));
   };
 
   const update = (id: number, wonder: Partial<Wonder>) => {
     adminStorage.updateWonder(id, wonder);
     refresh();
+    window.dispatchEvent(new CustomEvent("adminDataChange"));
   };
 
   const remove = (id: number) => {
     adminStorage.deleteWonder(id);
     refresh();
+    window.dispatchEvent(new CustomEvent("adminDataChange"));
   };
 
   const toggleActive = (id: number) => {
