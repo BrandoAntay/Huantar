@@ -100,13 +100,13 @@ export const AdminSidebar = ({
       {/* Sidebar */}
       <div
         className={cn(
-          "fixed lg:relative inset-y-0 left-0 z-50 w-80 bg-white border-r border-gray-200 transform transition-transform duration-300 ease-in-out",
+          "fixed lg:relative w-80 h-screen bg-white border-r border-gray-200 flex flex-col z-50 transform transition-transform duration-300 ease-in-out",
           isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
         )}
       >
         {/* Header - Fixed height */}
-        <div className="h-20 p-6 border-b border-gray-200 flex-shrink-0">
-          <div className="flex items-center justify-between">
+        <div className="flex-shrink-0 h-20 p-6 border-b border-gray-200">
+          <div className="flex items-center justify-between h-full">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-park-blue rounded-full flex items-center justify-center">
                 <Shield className="w-6 h-6 text-white" />
@@ -132,7 +132,7 @@ export const AdminSidebar = ({
         </div>
 
         {/* Navigation - Scrollable middle section */}
-        <nav className="flex-1 p-4 space-y-1 overflow-y-auto min-h-0">
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
           {navigationItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeSection === item.id;
@@ -177,8 +177,8 @@ export const AdminSidebar = ({
           })}
         </nav>
 
-        {/* Footer - Fixed height at bottom */}
-        <div className="h-24 p-4 border-t border-gray-200 flex-shrink-0">
+        {/* Footer - Always at bottom */}
+        <div className="flex-shrink-0 p-4 border-t border-gray-200">
           <Button
             onClick={handleLogout}
             variant="outline"
