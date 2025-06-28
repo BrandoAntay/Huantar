@@ -100,12 +100,12 @@ export const AdminSidebar = ({
       {/* Sidebar */}
       <div
         className={cn(
-          "fixed lg:relative inset-y-0 left-0 z-50 w-80 bg-white border-r border-gray-200 flex flex-col transform transition-transform duration-300 ease-in-out",
+          "fixed lg:relative inset-y-0 left-0 z-50 w-80 bg-white border-r border-gray-200 transform transition-transform duration-300 ease-in-out",
           isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
         )}
       >
-        {/* Header */}
-        <div className="p-6 border-b border-gray-200">
+        {/* Header - Fixed height */}
+        <div className="h-20 p-6 border-b border-gray-200 flex-shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-park-blue rounded-full flex items-center justify-center">
@@ -131,8 +131,8 @@ export const AdminSidebar = ({
           </div>
         </div>
 
-        {/* Navigation */}
-        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+        {/* Navigation - Scrollable middle section */}
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto min-h-0">
           {navigationItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeSection === item.id;
@@ -177,8 +177,8 @@ export const AdminSidebar = ({
           })}
         </nav>
 
-        {/* Footer */}
-        <div className="p-4 border-t border-gray-200">
+        {/* Footer - Fixed height at bottom */}
+        <div className="h-24 p-4 border-t border-gray-200 flex-shrink-0">
           <Button
             onClick={handleLogout}
             variant="outline"
