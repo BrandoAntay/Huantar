@@ -18,6 +18,8 @@ export const GroupPricing = () => {
     }));
 
   useEffect(() => {
+    if (carouselImages.length === 0) return;
+
     const timer = setInterval(() => {
       setCurrentImage((prev) => (prev + 1) % carouselImages.length);
     }, 4000);
