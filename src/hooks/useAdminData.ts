@@ -64,21 +64,40 @@ export function useHeroSlides() {
 
   useEffect(() => {
     refresh();
+
+    // Listen for storage changes to sync across components/tabs
+    const handleStorageChange = () => {
+      refresh();
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    // Custom event for same-tab updates
+    window.addEventListener("adminDataChange", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("adminDataChange", handleStorageChange);
+    };
   }, []);
 
   const add = (slide: Omit<HeroSlide, "id">) => {
     adminStorage.addHeroSlide(slide);
     refresh();
+    // Trigger custom event for same-tab updates
+    window.dispatchEvent(new CustomEvent("adminDataChange"));
   };
 
   const update = (id: number, slide: Partial<HeroSlide>) => {
     adminStorage.updateHeroSlide(id, slide);
     refresh();
+    window.dispatchEvent(new CustomEvent("adminDataChange"));
   };
 
   const remove = (id: number) => {
     adminStorage.deleteHeroSlide(id);
     refresh();
+    window.dispatchEvent(new CustomEvent("adminDataChange"));
   };
 
   const toggleActive = (id: number) => {
