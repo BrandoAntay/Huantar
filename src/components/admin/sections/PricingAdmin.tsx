@@ -22,28 +22,17 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import {
-  Plus,
-  Edit,
-  Trash2,
-  Eye,
-  EyeOff,
-  DollarSign,
-  Palette,
-} from "lucide-react";
+import { Plus, Edit, Trash2, EyeOff, DollarSign } from "lucide-react";
 import type { PriceOption } from "@/lib/adminStorage";
 
 const colorOptions = [
-  { value: "#054986", label: "Azul del Parque", preview: "#054986" },
-  { value: "#00864b", label: "Verde del Parque", preview: "#00864b" },
-  { value: "#f29200", label: "Naranja del Parque", preview: "#f29200" },
-  { value: "#dc2626", label: "Rojo", preview: "#dc2626" },
-  { value: "#7c3aed", label: "Púrpura", preview: "#7c3aed" },
-  { value: "#059669", label: "Verde Esmeralda", preview: "#059669" },
-  { value: "#ea580c", label: "Naranja Intenso", preview: "#ea580c" },
-  { value: "#0891b2", label: "Azul Cielo", preview: "#0891b2" },
+  { value: "#054986", label: "Azul del Parque" },
+  { value: "#00864b", label: "Verde del Parque" },
+  { value: "#f29200", label: "Naranja del Parque" },
+  { value: "#dc2626", label: "Rojo" },
+  { value: "#7c3aed", label: "Púrpura" },
+  { value: "#059669", label: "Verde Esmeralda" },
 ];
 
 export const PricingAdmin = () => {
@@ -54,7 +43,6 @@ export const PricingAdmin = () => {
     price: "",
     category: "",
     ageRange: "",
-    description: "",
     color: "#054986",
   });
 
@@ -63,7 +51,6 @@ export const PricingAdmin = () => {
       price: "",
       category: "",
       ageRange: "",
-      description: "",
       color: "#054986",
     });
   };
@@ -74,6 +61,7 @@ export const PricingAdmin = () => {
     add({
       ...formData,
       price: parseFloat(formData.price),
+      description: `Entrada para ${formData.category.toLowerCase()}`,
       active: true,
     });
 
@@ -86,7 +74,6 @@ export const PricingAdmin = () => {
       price: option.price.toString(),
       category: option.category,
       ageRange: option.ageRange,
-      description: option.description || "",
       color: option.color,
     });
     setEditingOption(option);
@@ -113,31 +100,28 @@ export const PricingAdmin = () => {
     remove(id);
   };
 
-  const activeOptions = priceOptions.filter((option) => option.active);
-  const inactiveOptions = priceOptions.filter((option) => !option.active);
-
   const formatPrice = (price: number) => {
     return `S/ ${price.toFixed(1)}`;
   };
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+      {/* Header con botón agregar */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-park-blue">
+          <h1 className="text-2xl font-bold text-gray-900">
             Costos de Entrada
           </h1>
           <p className="text-gray-600 mt-1">
-            Gestiona los precios y categorías de entrada al parque
+            Gestiona las cards de Costos de Entrada y Actividades
           </p>
         </div>
 
         <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-park-green hover:bg-park-green/90 text-white">
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white">
               <Plus className="w-4 h-4 mr-2" />
-              Agregar Precio
+              Agregar
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl">
@@ -145,41 +129,39 @@ export const PricingAdmin = () => {
               <DialogTitle>Agregar Nueva Categoría de Precio</DialogTitle>
             </DialogHeader>
             <div className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="price">Precio (S/)</Label>
-                  <Input
-                    id="price"
-                    type="number"
-                    step="0.1"
-                    min="0"
-                    value={formData.price}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        price: e.target.value,
-                      }))
-                    }
-                    placeholder="10.0"
-                    required
-                  />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="price">Precio</Label>
+                <Input
+                  id="price"
+                  type="number"
+                  step="0.1"
+                  min="0"
+                  value={formData.price}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      price: e.target.value,
+                    }))
+                  }
+                  placeholder="10.0"
+                  required
+                />
+              </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="category">Categoría</Label>
-                  <Input
-                    id="category"
-                    value={formData.category}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        category: e.target.value,
-                      }))
-                    }
-                    placeholder="Ej: Adultos"
-                    required
-                  />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="category">Categoría</Label>
+                <Input
+                  id="category"
+                  value={formData.category}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      category: e.target.value,
+                    }))
+                  }
+                  placeholder="Ej: Adultos"
+                  required
+                />
               </div>
 
               <div className="space-y-2">
@@ -199,24 +181,8 @@ export const PricingAdmin = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="description">Descripción (opcional)</Label>
-                <Textarea
-                  id="description"
-                  value={formData.description}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      description: e.target.value,
-                    }))
-                  }
-                  placeholder="Descripción de la categoría"
-                  rows={2}
-                />
-              </div>
-
-              <div className="space-y-2">
                 <Label>Color del círculo</Label>
-                <div className="grid grid-cols-4 gap-2">
+                <div className="grid grid-cols-3 gap-2">
                   {colorOptions.map((colorOption) => (
                     <button
                       key={colorOption.value}
@@ -228,19 +194,17 @@ export const PricingAdmin = () => {
                         }))
                       }
                       className={cn(
-                        "flex items-center space-x-2 p-2 rounded border-2 transition-all",
+                        "flex items-center space-x-2 p-3 rounded border-2 transition-all",
                         formData.color === colorOption.value
-                          ? "border-gray-400 bg-gray-50"
+                          ? "border-blue-500 bg-blue-50"
                           : "border-gray-200 hover:border-gray-300",
                       )}
                     >
                       <div
                         className="w-4 h-4 rounded-full"
-                        style={{ backgroundColor: colorOption.preview }}
+                        style={{ backgroundColor: colorOption.value }}
                       />
-                      <span className="text-xs text-gray-600 truncate">
-                        {colorOption.label}
-                      </span>
+                      <span className="text-sm">{colorOption.label}</span>
                     </button>
                   ))}
                 </div>
@@ -261,9 +225,9 @@ export const PricingAdmin = () => {
                   disabled={
                     !formData.price || !formData.category || !formData.ageRange
                   }
-                  className="bg-park-green hover:bg-park-green/90"
+                  className="bg-blue-600 hover:bg-blue-700"
                 >
-                  Agregar Precio
+                  Agregar
                 </Button>
               </div>
             </div>
@@ -271,221 +235,121 @@ export const PricingAdmin = () => {
         </Dialog>
       </div>
 
-      {/* Estadísticas */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              <DollarSign className="w-5 h-5 text-park-blue" />
-              <div>
-                <p className="text-sm text-gray-600">Total de Precios</p>
-                <p className="text-xl font-semibold">{priceOptions.length}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              <Eye className="w-5 h-5 text-green-500" />
-              <div>
-                <p className="text-sm text-gray-600">Activos</p>
-                <p className="text-xl font-semibold text-green-600">
-                  {activeOptions.length}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              <EyeOff className="w-5 h-5 text-gray-400" />
-              <div>
-                <p className="text-sm text-gray-600">Inactivos</p>
-                <p className="text-xl font-semibold text-gray-500">
-                  {inactiveOptions.length}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Lista de precios activos */}
+      {/* Lista de cards */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
-            <Eye className="w-5 h-5 text-green-500" />
-            <span>Precios Activos ({activeOptions.length})</span>
+            <DollarSign className="w-5 h-5 text-blue-600" />
+            <span>Lista de Cards de Precios</span>
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {activeOptions.map((option) => (
-              <Card key={option.id} className="overflow-hidden relative">
-                <CardContent className="p-4 text-center">
-                  {/* Círculo con el precio */}
-                  <div
-                    className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center text-white font-bold shadow-lg"
-                    style={{ backgroundColor: option.color }}
-                  >
-                    {formatPrice(option.price)}
-                  </div>
-
-                  {/* Información */}
-                  <h4 className="font-semibold text-sm mb-1">
+          <div className="space-y-3">
+            {priceOptions.map((option) => (
+              <div
+                key={option.id}
+                className={cn(
+                  "flex items-center space-x-4 p-4 border rounded-lg",
+                  option.active
+                    ? "bg-white border-gray-200"
+                    : "bg-gray-100 border-gray-300",
+                )}
+              >
+                <div
+                  className={cn(
+                    "w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-sm",
+                    !option.active && "grayscale",
+                  )}
+                  style={{ backgroundColor: option.color }}
+                >
+                  {formatPrice(option.price)}
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-medium text-gray-900">
                     {option.category}
                   </h4>
-                  <p className="text-xs text-gray-600 mb-2">
-                    {option.ageRange}
-                  </p>
+                  <p className="text-sm text-gray-600">{option.ageRange}</p>
                   {option.description && (
-                    <p className="text-xs text-gray-500 line-clamp-2">
+                    <p className="text-xs text-gray-500 mt-1">
                       {option.description}
                     </p>
                   )}
+                </div>
+                <div className="flex space-x-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleEdit(option)}
+                  >
+                    <Edit className="w-4 h-4" />
+                    Editar
+                  </Button>
 
-                  {/* Botones de acción */}
-                  <div className="flex justify-center space-x-1 mt-3">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => handleEdit(option)}
-                    >
-                      <Edit className="w-3 h-3" />
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => toggleActive(option.id)}
-                    >
-                      <EyeOff className="w-3 h-3" />
-                    </Button>
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button size="sm" variant="destructive">
-                          <Trash2 className="w-3 h-3" />
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>¿Eliminar precio?</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            Esta acción no se puede deshacer. El precio se
-                            eliminará permanentemente.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                          <AlertDialogAction
-                            onClick={() => handleDelete(option.id)}
-                            className="bg-red-600 hover:bg-red-700"
-                          >
-                            Eliminar
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  </div>
-                </CardContent>
-              </Card>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button size="sm" variant="outline">
+                        <EyeOff className="w-4 h-4" />
+                        Desactivar
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>¿Desactivar card?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          La card se colocará de color gris en la lista y no se
+                          mostrará en la sección.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => toggleActive(option.id)}
+                        >
+                          Confirmar
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button size="sm" variant="destructive">
+                        <Trash2 className="w-4 h-4" />
+                        Eliminar
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>¿Eliminar card?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Esta acción no se puede deshacer. La card se eliminará
+                          permanentemente.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => handleDelete(option.id)}
+                          className="bg-red-600 hover:bg-red-700"
+                        >
+                          Eliminar
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
+              </div>
             ))}
+
+            {priceOptions.length === 0 && (
+              <div className="text-center py-8 text-gray-500">
+                No hay precios. Haz clic en "Agregar" para añadir el primer
+                precio.
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>
-
-      {/* Lista de precios inactivos */}
-      {inactiveOptions.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <EyeOff className="w-5 h-5 text-gray-400" />
-              <span>Precios Inactivos ({inactiveOptions.length})</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {inactiveOptions.map((option) => (
-                <Card
-                  key={option.id}
-                  className={cn("overflow-hidden relative opacity-60")}
-                >
-                  <CardContent className="p-4 text-center">
-                    {/* Círculo con el precio */}
-                    <div
-                      className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center text-white font-bold shadow-lg grayscale"
-                      style={{ backgroundColor: option.color }}
-                    >
-                      {formatPrice(option.price)}
-                    </div>
-
-                    {/* Información */}
-                    <h4 className="font-semibold text-sm mb-1">
-                      {option.category}
-                    </h4>
-                    <p className="text-xs text-gray-600 mb-2">
-                      {option.ageRange}
-                    </p>
-                    {option.description && (
-                      <p className="text-xs text-gray-500 line-clamp-2">
-                        {option.description}
-                      </p>
-                    )}
-
-                    {/* Botones de acción */}
-                    <div className="flex justify-center space-x-1 mt-3">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => handleEdit(option)}
-                      >
-                        <Edit className="w-3 h-3" />
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => toggleActive(option.id)}
-                      >
-                        <Eye className="w-3 h-3" />
-                      </Button>
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Button size="sm" variant="destructive">
-                            <Trash2 className="w-3 h-3" />
-                          </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>
-                              ¿Eliminar precio?
-                            </AlertDialogTitle>
-                            <AlertDialogDescription>
-                              Esta acción no se puede deshacer. El precio se
-                              eliminará permanentemente.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                            <AlertDialogAction
-                              onClick={() => handleDelete(option.id)}
-                              className="bg-red-600 hover:bg-red-700"
-                            >
-                              Eliminar
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
 
       {/* Modal de edición */}
       <Dialog
@@ -497,38 +361,36 @@ export const PricingAdmin = () => {
             <DialogTitle>Editar Precio</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="edit-price">Precio (S/)</Label>
-                <Input
-                  id="edit-price"
-                  type="number"
-                  step="0.1"
-                  min="0"
-                  value={formData.price}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, price: e.target.value }))
-                  }
-                  placeholder="10.0"
-                  required
-                />
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-price">Precio</Label>
+              <Input
+                id="edit-price"
+                type="number"
+                step="0.1"
+                min="0"
+                value={formData.price}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, price: e.target.value }))
+                }
+                placeholder="10.0"
+                required
+              />
+            </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="edit-category">Categoría</Label>
-                <Input
-                  id="edit-category"
-                  value={formData.category}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      category: e.target.value,
-                    }))
-                  }
-                  placeholder="Ej: Adultos"
-                  required
-                />
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-category">Categoría</Label>
+              <Input
+                id="edit-category"
+                value={formData.category}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    category: e.target.value,
+                  }))
+                }
+                placeholder="Ej: Adultos"
+                required
+              />
             </div>
 
             <div className="space-y-2">
@@ -548,24 +410,8 @@ export const PricingAdmin = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="edit-description">Descripción (opcional)</Label>
-              <Textarea
-                id="edit-description"
-                value={formData.description}
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    description: e.target.value,
-                  }))
-                }
-                placeholder="Descripción de la categoría"
-                rows={2}
-              />
-            </div>
-
-            <div className="space-y-2">
               <Label>Color del círculo</Label>
-              <div className="grid grid-cols-4 gap-2">
+              <div className="grid grid-cols-3 gap-2">
                 {colorOptions.map((colorOption) => (
                   <button
                     key={colorOption.value}
@@ -577,19 +423,17 @@ export const PricingAdmin = () => {
                       }))
                     }
                     className={cn(
-                      "flex items-center space-x-2 p-2 rounded border-2 transition-all",
+                      "flex items-center space-x-2 p-3 rounded border-2 transition-all",
                       formData.color === colorOption.value
-                        ? "border-gray-400 bg-gray-50"
+                        ? "border-blue-500 bg-blue-50"
                         : "border-gray-200 hover:border-gray-300",
                     )}
                   >
                     <div
                       className="w-4 h-4 rounded-full"
-                      style={{ backgroundColor: colorOption.preview }}
+                      style={{ backgroundColor: colorOption.value }}
                     />
-                    <span className="text-xs text-gray-600 truncate">
-                      {colorOption.label}
-                    </span>
+                    <span className="text-sm">{colorOption.label}</span>
                   </button>
                 ))}
               </div>
@@ -610,9 +454,9 @@ export const PricingAdmin = () => {
                 disabled={
                   !formData.price || !formData.category || !formData.ageRange
                 }
-                className="bg-park-blue hover:bg-park-blue/90"
+                className="bg-blue-600 hover:bg-blue-700"
               >
-                Actualizar Precio
+                Actualizar
               </Button>
             </div>
           </div>
