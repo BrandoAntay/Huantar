@@ -48,7 +48,7 @@ export const AdminLayout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="h-screen bg-gray-50 flex overflow-hidden">
       {/* Sidebar */}
       <AdminSidebar
         activeSection={activeSection}
@@ -56,9 +56,11 @@ export const AdminLayout = () => {
       />
 
       {/* Main content */}
-      <div className="flex-1 lg:ml-0">
-        <div className="p-6 lg:p-8">
-          <div className="max-w-7xl mx-auto">{renderSection()}</div>
+      <div className="flex-1 flex flex-col min-w-0">
+        <div className="flex-1 overflow-y-auto">
+          <div className="p-6 lg:p-8">
+            <div className="max-w-7xl mx-auto">{renderSection()}</div>
+          </div>
         </div>
       </div>
     </div>
