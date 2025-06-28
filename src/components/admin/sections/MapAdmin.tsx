@@ -22,16 +22,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-import {
-  Edit,
-  Eye,
-  EyeOff,
-  Upload,
-  Map,
-  CheckCircle,
-  XCircle,
-  Image as ImageIcon,
-} from "lucide-react";
+import { Edit, EyeOff, Upload, Map } from "lucide-react";
 
 export const MapAdmin = () => {
   const { mapData, update, toggleActive } = useMapData();
@@ -90,91 +81,63 @@ export const MapAdmin = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-park-blue">Mapa del Parque</h1>
-          <p className="text-gray-600 mt-1">
-            Gestiona la imagen del mapa que se muestra en la homepage
-          </p>
-        </div>
-
-        <Button
-          onClick={handleEdit}
-          className="bg-park-blue hover:bg-park-blue/90 text-white"
-        >
-          <Edit className="w-4 h-4 mr-2" />
-          Editar Mapa
-        </Button>
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900">Mapa del Parque</h1>
+        <p className="text-gray-600 mt-1">
+          Gestiona la imagen de la sección Mapa del Parque
+        </p>
       </div>
 
-      {/* Estadísticas */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              <Map className="w-5 h-5 text-park-blue" />
-              <div>
-                <p className="text-sm text-gray-600">Estado del Mapa</p>
-                <p className="text-xl font-semibold">Configurado</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              {mapData.active ? (
-                <CheckCircle className="w-5 h-5 text-green-500" />
-              ) : (
-                <XCircle className="w-5 h-5 text-red-500" />
-              )}
-              <div>
-                <p className="text-sm text-gray-600">Visibilidad</p>
-                <p
-                  className={cn(
-                    "text-xl font-semibold",
-                    mapData.active ? "text-green-600" : "text-red-600",
-                  )}
-                >
-                  {mapData.active ? "Visible" : "Oculto"}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Vista del mapa actual */}
+      {/* Card del mapa */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <ImageIcon className="w-5 h-5 text-park-blue" />
-              <span>Mapa Actual</span>
+          <CardTitle className="flex items-center space-x-2">
+            <Map className="w-5 h-5 text-blue-600" />
+            <span>Imagen del Mapa</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div
+            className={cn(
+              "flex items-center space-x-4 p-4 border rounded-lg",
+              mapData.active
+                ? "bg-white border-gray-200"
+                : "bg-gray-100 border-gray-300",
+            )}
+          >
+            <img
+              src={mapData.image}
+              alt="Mapa del parque"
+              className={cn(
+                "w-24 h-24 object-cover rounded",
+                !mapData.active && "grayscale",
+              )}
+            />
+            <div className="flex-1">
+              <h4 className="font-medium text-gray-900">Mapa del Parque</h4>
+              <p className="text-sm text-gray-600">
+                Imagen principal del mapa del parque zonal
+              </p>
+              <p
+                className={cn(
+                  "text-xs mt-1",
+                  mapData.active ? "text-green-600" : "text-gray-500",
+                )}
+              >
+                Estado: {mapData.active ? "Visible" : "Oculto"}
+              </p>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex space-x-2">
               <Button size="sm" variant="outline" onClick={handleEdit}>
-                <Edit className="w-4 h-4 mr-1" />
+                <Edit className="w-4 h-4" />
                 Editar
               </Button>
+
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button
-                    size="sm"
-                    variant={mapData.active ? "destructive" : "default"}
-                  >
-                    {mapData.active ? (
-                      <>
-                        <EyeOff className="w-4 h-4 mr-1" />
-                        Desactivar
-                      </>
-                    ) : (
-                      <>
-                        <Eye className="w-4 h-4 mr-1" />
-                        Activar
-                      </>
-                    )}
+                  <Button size="sm" variant="outline">
+                    <EyeOff className="w-4 h-4" />
+                    Desactivar
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
@@ -184,103 +147,18 @@ export const MapAdmin = () => {
                     </AlertDialogTitle>
                     <AlertDialogDescription>
                       {mapData.active
-                        ? "El mapa se ocultará de la sección 'Mapa del Parque' en la homepage."
-                        : "El mapa volverá a mostrarse en la sección 'Mapa del Parque' en la homepage."}
+                        ? "La imagen se desactivará y no se mostrará en la sección Mapa del Parque. Se colocará de color gris."
+                        : "La imagen volverá a mostrarse en la sección Mapa del Parque."}
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={toggleActive}
-                      className={
-                        mapData.active ? "bg-red-600 hover:bg-red-700" : ""
-                      }
-                    >
-                      {mapData.active ? "Desactivar" : "Activar"}
+                    <AlertDialogAction onClick={toggleActive}>
+                      Confirmar
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
-            </div>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {/* Vista previa del mapa */}
-            <div
-              className={cn(
-                "relative rounded-lg overflow-hidden border-2",
-                mapData.active
-                  ? "border-green-200 bg-green-50"
-                  : "border-red-200 bg-red-50",
-              )}
-            >
-              <img
-                src={mapData.image}
-                alt="Mapa del parque"
-                className={cn(
-                  "w-full h-64 object-cover",
-                  !mapData.active && "grayscale opacity-60",
-                )}
-              />
-
-              {/* Status overlay */}
-              <div
-                className={cn(
-                  "absolute top-2 right-2 px-3 py-1 rounded-full text-xs font-medium",
-                  mapData.active
-                    ? "bg-green-100 text-green-700 border border-green-200"
-                    : "bg-red-100 text-red-700 border border-red-200",
-                )}
-              >
-                {mapData.active ? "Visible en homepage" : "Oculto en homepage"}
-              </div>
-
-              {/* Preview overlay para estados */}
-              {!mapData.active && (
-                <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                  <div className="bg-white px-4 py-2 rounded-lg shadow-lg">
-                    <p className="text-sm font-medium text-gray-700">
-                      Mapa desactivado
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Información del estado */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-              <div className="space-y-2">
-                <h4 className="font-medium text-gray-700">
-                  Estado de visibilidad:
-                </h4>
-                <div className="flex items-center space-x-2">
-                  {mapData.active ? (
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                  ) : (
-                    <XCircle className="w-4 h-4 text-red-500" />
-                  )}
-                  <span
-                    className={
-                      mapData.active ? "text-green-600" : "text-red-600"
-                    }
-                  >
-                    {mapData.active
-                      ? "El mapa se muestra en la homepage"
-                      : "El mapa está oculto en la homepage"}
-                  </span>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <h4 className="font-medium text-gray-700">Acciones rápidas:</h4>
-                <div className="flex items-center space-x-2">
-                  <Button size="sm" variant="outline" onClick={handleEdit}>
-                    <Edit className="w-3 h-3 mr-1" />
-                    Cambiar imagen
-                  </Button>
-                </div>
-              </div>
             </div>
           </div>
         </CardContent>
@@ -293,10 +171,22 @@ export const MapAdmin = () => {
             <DialogTitle>Editar Mapa del Parque</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            {/* Upload de imagen */}
+            {/* Vista de imagen actual */}
             <div className="space-y-2">
-              <Label>Nueva imagen del mapa</Label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
+              <Label>Imagen actual</Label>
+              <div className="border rounded-lg p-4 bg-gray-50">
+                <img
+                  src={mapData.image}
+                  alt="Mapa actual"
+                  className="w-full h-48 object-cover rounded"
+                />
+              </div>
+            </div>
+
+            {/* Upload de nueva imagen */}
+            <div className="space-y-2">
+              <Label>Seleccionar nueva imagen</Label>
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-blue-400 transition-colors">
                 <div className="text-center">
                   <input
                     type="file"
@@ -310,33 +200,18 @@ export const MapAdmin = () => {
                     <p className="text-sm text-gray-600">
                       Haz clic para seleccionar una nueva imagen del mapa
                     </p>
-                    <p className="text-xs text-gray-500 mt-1">
-                      Recomendado: Imágenes claras y legibles del mapa del
-                      parque
-                    </p>
                   </label>
                 </div>
-                {formData.image && (
+                {formData.image !== mapData.image && formData.image && (
                   <div className="mt-4">
+                    <p className="text-sm text-gray-600 mb-2">Nueva imagen:</p>
                     <img
                       src={formData.image}
-                      alt="Preview del nuevo mapa"
+                      alt="Preview nuevo mapa"
                       className="w-full h-48 object-cover rounded"
                     />
                   </div>
                 )}
-              </div>
-            </div>
-
-            {/* Imagen actual para comparación */}
-            <div className="space-y-2">
-              <Label>Imagen actual</Label>
-              <div className="border rounded-lg p-2 bg-gray-50">
-                <img
-                  src={mapData.image}
-                  alt="Mapa actual"
-                  className="w-full h-32 object-cover rounded"
-                />
               </div>
             </div>
 
@@ -353,9 +228,9 @@ export const MapAdmin = () => {
               <Button
                 onClick={handleUpdate}
                 disabled={!formData.image}
-                className="bg-park-blue hover:bg-park-blue/90"
+                className="bg-blue-600 hover:bg-blue-700"
               >
-                Actualizar Mapa
+                Actualizar
               </Button>
             </div>
           </div>

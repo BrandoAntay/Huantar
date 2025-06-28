@@ -20,19 +20,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-import {
-  Plus,
-  Edit,
-  Trash2,
-  Eye,
-  EyeOff,
-  Upload,
-  Users,
-  Image as ImageIcon,
-} from "lucide-react";
+import { Plus, Edit, Trash2, EyeOff, Upload, Users } from "lucide-react";
 import type { GroupImage } from "@/lib/adminStorage";
 
 export const GroupsAdmin = () => {
@@ -41,23 +31,21 @@ export const GroupsAdmin = () => {
   const [editingImage, setEditingImage] = useState<GroupImage | null>(null);
   const [formData, setFormData] = useState({
     image: "",
-    alt: "",
-    caption: "",
   });
 
   const resetForm = () => {
     setFormData({
       image: "",
-      alt: "",
-      caption: "",
     });
   };
 
   const handleAdd = () => {
-    if (!formData.image || !formData.alt) return;
+    if (!formData.image) return;
 
     add({
-      ...formData,
+      image: formData.image,
+      alt: "Imagen del carrusel de grupos grandes",
+      caption: "Experiencia grupal en el parque",
       active: true,
     });
 
@@ -68,16 +56,16 @@ export const GroupsAdmin = () => {
   const handleEdit = (image: GroupImage) => {
     setFormData({
       image: image.image,
-      alt: image.alt,
-      caption: image.caption,
     });
     setEditingImage(image);
   };
 
   const handleUpdate = () => {
-    if (!editingImage || !formData.image || !formData.alt) return;
+    if (!editingImage || !formData.image) return;
 
-    update(editingImage.id, formData);
+    update(editingImage.id, {
+      image: formData.image,
+    });
     resetForm();
     setEditingImage(null);
   };
@@ -98,25 +86,22 @@ export const GroupsAdmin = () => {
     }
   };
 
-  const activeImages = groupImages.filter((image) => image.active);
-  const inactiveImages = groupImages.filter((image) => !image.active);
-
   return (
     <div className="space-y-6">
-      {/* Header */}
+      {/* Header con botón agregar */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-park-blue">Grupos Grandes</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Grupos Grandes</h1>
           <p className="text-gray-600 mt-1">
-            Gestiona las imágenes del carrusel de la sección Grupos Grandes
+            Gestiona las imágenes del carrusel pequeño de Grupos Grandes
           </p>
         </div>
 
         <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-park-green hover:bg-park-green/90 text-white">
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white">
               <Plus className="w-4 h-4 mr-2" />
-              Agregar Imagen
+              Agregar
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl">
@@ -126,8 +111,8 @@ export const GroupsAdmin = () => {
             <div className="space-y-4">
               {/* Upload de imagen */}
               <div className="space-y-2">
-                <Label>Imagen del Grupo</Label>
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
+                <Label>Seleccionar imagen</Label>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-blue-400 transition-colors">
                   <div className="text-center">
                     <input
                       type="file"
@@ -144,9 +129,6 @@ export const GroupsAdmin = () => {
                       <p className="text-sm text-gray-600">
                         Haz clic para seleccionar una imagen o arrastra aquí
                       </p>
-                      <p className="text-xs text-gray-500 mt-1">
-                        Recomendado: Imágenes de grupos disfrutando en el parque
-                      </p>
                     </label>
                   </div>
                   {formData.image && (
@@ -161,40 +143,6 @@ export const GroupsAdmin = () => {
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="alt">Descripción de la imagen (Alt text)</Label>
-                <Input
-                  id="alt"
-                  value={formData.alt}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, alt: e.target.value }))
-                  }
-                  placeholder="Ej: Grupo disfrutando en el parque"
-                  required
-                />
-                <p className="text-xs text-gray-500">
-                  Describe lo que se ve en la imagen para accesibilidad
-                </p>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="caption">Pie de foto (opcional)</Label>
-                <Input
-                  id="caption"
-                  value={formData.caption}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      caption: e.target.value,
-                    }))
-                  }
-                  placeholder="Ej: Diversión familiar garantizada"
-                />
-                <p className="text-xs text-gray-500">
-                  Texto que aparecerá sobre la imagen
-                </p>
-              </div>
-
               <div className="flex justify-end space-x-2">
                 <Button
                   variant="outline"
@@ -207,10 +155,10 @@ export const GroupsAdmin = () => {
                 </Button>
                 <Button
                   onClick={handleAdd}
-                  disabled={!formData.image || !formData.alt}
-                  className="bg-park-green hover:bg-park-green/90"
+                  disabled={!formData.image}
+                  className="bg-blue-600 hover:bg-blue-700"
                 >
-                  Agregar Imagen
+                  Agregar
                 </Button>
               </div>
             </div>
@@ -218,225 +166,113 @@ export const GroupsAdmin = () => {
         </Dialog>
       </div>
 
-      {/* Estadísticas */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              <ImageIcon className="w-5 h-5 text-park-blue" />
-              <div>
-                <p className="text-sm text-gray-600">Total de Imágenes</p>
-                <p className="text-xl font-semibold">{groupImages.length}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              <Eye className="w-5 h-5 text-green-500" />
-              <div>
-                <p className="text-sm text-gray-600">Activas</p>
-                <p className="text-xl font-semibold text-green-600">
-                  {activeImages.length}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              <EyeOff className="w-5 h-5 text-gray-400" />
-              <div>
-                <p className="text-sm text-gray-600">Inactivas</p>
-                <p className="text-xl font-semibold text-gray-500">
-                  {inactiveImages.length}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Lista de imágenes activas */}
+      {/* Lista de imágenes */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
-            <Eye className="w-5 h-5 text-green-500" />
-            <span>Imágenes Activas ({activeImages.length})</span>
+            <Users className="w-5 h-5 text-blue-600" />
+            <span>Lista de Imágenes del Carrusel Pequeño</span>
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {activeImages.map((image) => (
-              <Card key={image.id} className="overflow-hidden">
-                <div className="relative">
-                  <img
-                    src={image.image}
-                    alt={image.alt}
-                    className="w-full h-40 object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                    <div className="flex space-x-2">
-                      <Button
-                        size="sm"
-                        variant="secondary"
-                        onClick={() => handleEdit(image)}
-                      >
-                        <Edit className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="secondary"
-                        onClick={() => toggleActive(image.id)}
-                      >
-                        <EyeOff className="w-4 h-4" />
-                      </Button>
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Button size="sm" variant="destructive">
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>
-                              ¿Eliminar imagen?
-                            </AlertDialogTitle>
-                            <AlertDialogDescription>
-                              Esta acción no se puede deshacer. La imagen se
-                              eliminará permanentemente del carrusel.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                            <AlertDialogAction
-                              onClick={() => handleDelete(image.id)}
-                              className="bg-red-600 hover:bg-red-700"
-                            >
-                              Eliminar
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    </div>
-                  </div>
-                  {/* Caption overlay */}
-                  {image.caption && (
-                    <div className="absolute bottom-0 left-0 right-0 bg-black/60 p-2">
-                      <p className="text-white text-xs text-center">
-                        {image.caption}
-                      </p>
-                    </div>
+          <div className="space-y-3">
+            {groupImages.map((image) => (
+              <div
+                key={image.id}
+                className={cn(
+                  "flex items-center space-x-4 p-4 border rounded-lg",
+                  image.active
+                    ? "bg-white border-gray-200"
+                    : "bg-gray-100 border-gray-300",
+                )}
+              >
+                <img
+                  src={image.image}
+                  alt={image.alt}
+                  className={cn(
+                    "w-16 h-16 object-cover rounded",
+                    !image.active && "grayscale",
                   )}
+                />
+                <div className="flex-1">
+                  <h4 className="font-medium text-gray-900">{image.alt}</h4>
+                  <p className="text-sm text-gray-600">{image.caption}</p>
                 </div>
-                <CardContent className="p-3">
-                  <p className="text-xs text-gray-600 font-medium mb-1">
-                    {image.alt}
-                  </p>
-                  {image.caption && (
-                    <p className="text-xs text-gray-500">{image.caption}</p>
-                  )}
-                </CardContent>
-              </Card>
+                <div className="flex space-x-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleEdit(image)}
+                  >
+                    <Edit className="w-4 h-4" />
+                    Editar
+                  </Button>
+
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button size="sm" variant="outline">
+                        <EyeOff className="w-4 h-4" />
+                        Desactivar
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>¿Desactivar imagen?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          La imagen se colocará de color gris en la lista y no
+                          se mostrará en el carrusel.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => toggleActive(image.id)}
+                        >
+                          Confirmar
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button size="sm" variant="destructive">
+                        <Trash2 className="w-4 h-4" />
+                        Eliminar
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>¿Eliminar imagen?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Esta acción no se puede deshacer. La imagen se
+                          eliminará permanentemente.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => handleDelete(image.id)}
+                          className="bg-red-600 hover:bg-red-700"
+                        >
+                          Eliminar
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
+              </div>
             ))}
+
+            {groupImages.length === 0 && (
+              <div className="text-center py-8 text-gray-500">
+                No hay imágenes. Haz clic en "Agregar" para añadir la primera
+                imagen.
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>
-
-      {/* Lista de imágenes inactivas */}
-      {inactiveImages.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <EyeOff className="w-5 h-5 text-gray-400" />
-              <span>Imágenes Inactivas ({inactiveImages.length})</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {inactiveImages.map((image) => (
-                <Card
-                  key={image.id}
-                  className={cn("overflow-hidden opacity-60")}
-                >
-                  <div className="relative">
-                    <img
-                      src={image.image}
-                      alt={image.alt}
-                      className="w-full h-40 object-cover grayscale"
-                    />
-                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                      <div className="flex space-x-2">
-                        <Button
-                          size="sm"
-                          variant="secondary"
-                          onClick={() => handleEdit(image)}
-                        >
-                          <Edit className="w-4 h-4" />
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="secondary"
-                          onClick={() => toggleActive(image.id)}
-                        >
-                          <Eye className="w-4 h-4" />
-                        </Button>
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button size="sm" variant="destructive">
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>
-                                ¿Eliminar imagen?
-                              </AlertDialogTitle>
-                              <AlertDialogDescription>
-                                Esta acción no se puede deshacer. La imagen se
-                                eliminará permanentemente del carrusel.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                              <AlertDialogAction
-                                onClick={() => handleDelete(image.id)}
-                                className="bg-red-600 hover:bg-red-700"
-                              >
-                                Eliminar
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </div>
-                    </div>
-                    {/* Caption overlay */}
-                    {image.caption && (
-                      <div className="absolute bottom-0 left-0 right-0 bg-black/60 p-2">
-                        <p className="text-white text-xs text-center">
-                          {image.caption}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                  <CardContent className="p-3">
-                    <p className="text-xs text-gray-600 font-medium mb-1">
-                      {image.alt}
-                    </p>
-                    {image.caption && (
-                      <p className="text-xs text-gray-500">{image.caption}</p>
-                    )}
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
 
       {/* Modal de edición */}
       <Dialog
@@ -450,8 +286,8 @@ export const GroupsAdmin = () => {
           <div className="space-y-4">
             {/* Upload de imagen */}
             <div className="space-y-2">
-              <Label>Imagen del Grupo</Label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
+              <Label>Cambiar imagen</Label>
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-blue-400 transition-colors">
                 <div className="text-center">
                   <input
                     type="file"
@@ -479,39 +315,6 @@ export const GroupsAdmin = () => {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="edit-alt">
-                Descripción de la imagen (Alt text)
-              </Label>
-              <Input
-                id="edit-alt"
-                value={formData.alt}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, alt: e.target.value }))
-                }
-                placeholder="Ej: Grupo disfrutando en el parque"
-                required
-              />
-              <p className="text-xs text-gray-500">
-                Describe lo que se ve en la imagen para accesibilidad
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="edit-caption">Pie de foto (opcional)</Label>
-              <Input
-                id="edit-caption"
-                value={formData.caption}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, caption: e.target.value }))
-                }
-                placeholder="Ej: Diversión familiar garantizada"
-              />
-              <p className="text-xs text-gray-500">
-                Texto que aparecerá sobre la imagen
-              </p>
-            </div>
-
             <div className="flex justify-end space-x-2">
               <Button
                 variant="outline"
@@ -524,10 +327,10 @@ export const GroupsAdmin = () => {
               </Button>
               <Button
                 onClick={handleUpdate}
-                disabled={!formData.image || !formData.alt}
-                className="bg-park-blue hover:bg-park-blue/90"
+                disabled={!formData.image}
+                className="bg-blue-600 hover:bg-blue-700"
               >
-                Actualizar Imagen
+                Actualizar
               </Button>
             </div>
           </div>
