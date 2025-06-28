@@ -221,21 +221,36 @@ export function usePriceOptions() {
 
   useEffect(() => {
     refresh();
+
+    const handleStorageChange = () => {
+      refresh();
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("adminDataChange", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("adminDataChange", handleStorageChange);
+    };
   }, []);
 
   const add = (option: Omit<PriceOption, "id">) => {
     adminStorage.addPriceOption(option);
     refresh();
+    window.dispatchEvent(new CustomEvent("adminDataChange"));
   };
 
   const update = (id: number, option: Partial<PriceOption>) => {
     adminStorage.updatePriceOption(id, option);
     refresh();
+    window.dispatchEvent(new CustomEvent("adminDataChange"));
   };
 
   const remove = (id: number) => {
     adminStorage.deletePriceOption(id);
     refresh();
+    window.dispatchEvent(new CustomEvent("adminDataChange"));
   };
 
   const toggleActive = (id: number) => {
@@ -257,21 +272,36 @@ export function useGroupImages() {
 
   useEffect(() => {
     refresh();
+
+    const handleStorageChange = () => {
+      refresh();
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("adminDataChange", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("adminDataChange", handleStorageChange);
+    };
   }, []);
 
   const add = (image: Omit<GroupImage, "id">) => {
     adminStorage.addGroupImage(image);
     refresh();
+    window.dispatchEvent(new CustomEvent("adminDataChange"));
   };
 
   const update = (id: number, image: Partial<GroupImage>) => {
     adminStorage.updateGroupImage(id, image);
     refresh();
+    window.dispatchEvent(new CustomEvent("adminDataChange"));
   };
 
   const remove = (id: number) => {
     adminStorage.deleteGroupImage(id);
     refresh();
+    window.dispatchEvent(new CustomEvent("adminDataChange"));
   };
 
   const toggleActive = (id: number) => {
@@ -293,11 +323,24 @@ export function useMapData() {
 
   useEffect(() => {
     refresh();
+
+    const handleStorageChange = () => {
+      refresh();
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("adminDataChange", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("adminDataChange", handleStorageChange);
+    };
   }, []);
 
   const update = (data: Partial<MapData>) => {
     adminStorage.updateMapData(data);
     refresh();
+    window.dispatchEvent(new CustomEvent("adminDataChange"));
   };
 
   const toggleActive = () => {
