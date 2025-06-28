@@ -22,9 +22,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { Plus, Edit, Trash2, Eye, EyeOff, Upload, Globe } from "lucide-react";
+import { Plus, Edit, Trash2, EyeOff, Upload, Globe } from "lucide-react";
 import type { Wonder } from "@/lib/adminStorage";
 
 export const WondersAdmin = () => {
@@ -34,16 +33,12 @@ export const WondersAdmin = () => {
   const [formData, setFormData] = useState({
     name: "",
     image: "",
-    description: "Réplica de",
-    fullDescription: "",
   });
 
   const resetForm = () => {
     setFormData({
       name: "",
       image: "",
-      description: "Réplica de",
-      fullDescription: "",
     });
   };
 
@@ -51,7 +46,10 @@ export const WondersAdmin = () => {
     if (!formData.name || !formData.image) return;
 
     add({
-      ...formData,
+      name: formData.name,
+      image: formData.image,
+      description: "Réplica de",
+      fullDescription: `Descripción de ${formData.name}`,
       active: true,
     });
 
@@ -63,8 +61,6 @@ export const WondersAdmin = () => {
     setFormData({
       name: wonder.name,
       image: wonder.image,
-      description: wonder.description,
-      fullDescription: wonder.fullDescription,
     });
     setEditingWonder(wonder);
   };
@@ -72,7 +68,10 @@ export const WondersAdmin = () => {
   const handleUpdate = () => {
     if (!editingWonder || !formData.name || !formData.image) return;
 
-    update(editingWonder.id, formData);
+    update(editingWonder.id, {
+      name: formData.name,
+      image: formData.image,
+    });
     resetForm();
     setEditingWonder(null);
   };
@@ -93,27 +92,24 @@ export const WondersAdmin = () => {
     }
   };
 
-  const activeWonders = wonders.filter((wonder) => wonder.active);
-  const inactiveWonders = wonders.filter((wonder) => !wonder.active);
-
   return (
     <div className="space-y-6">
-      {/* Header */}
+      {/* Header con botón agregar */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-park-blue">
+          <h1 className="text-2xl font-bold text-gray-900">
             Maravillas del Mundo
           </h1>
           <p className="text-gray-600 mt-1">
-            Gestiona las tarjetas de las maravillas del mundo en el carrusel
+            Gestiona las tarjetas del carrusel de Maravillas del Mundo
           </p>
         </div>
 
         <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-park-green hover:bg-park-green/90 text-white">
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white">
               <Plus className="w-4 h-4 mr-2" />
-              Agregar Maravilla
+              Agregar
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl">
@@ -123,8 +119,8 @@ export const WondersAdmin = () => {
             <div className="space-y-4">
               {/* Upload de imagen */}
               <div className="space-y-2">
-                <Label>Imagen de la Maravilla</Label>
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
+                <Label>Seleccionar imagen</Label>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-blue-400 transition-colors">
                   <div className="text-center">
                     <input
                       type="file"
@@ -156,7 +152,7 @@ export const WondersAdmin = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="name">Nombre de la Maravilla</Label>
+                <Label htmlFor="name">Línea 1: [Nombre de la Maravilla]</Label>
                 <Input
                   id="name"
                   value={formData.name}
@@ -165,37 +161,6 @@ export const WondersAdmin = () => {
                   }
                   placeholder="Ej: Cristo Redentor"
                   required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="description">Línea descriptiva</Label>
-                <Input
-                  id="description"
-                  value={formData.description}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      description: e.target.value,
-                    }))
-                  }
-                  placeholder="Ej: Réplica del"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="fullDescription">Descripción completa</Label>
-                <Textarea
-                  id="fullDescription"
-                  value={formData.fullDescription}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      fullDescription: e.target.value,
-                    }))
-                  }
-                  placeholder="Descripción detallada de la maravilla"
-                  rows={4}
                 />
               </div>
 
@@ -212,9 +177,9 @@ export const WondersAdmin = () => {
                 <Button
                   onClick={handleAdd}
                   disabled={!formData.name || !formData.image}
-                  className="bg-park-green hover:bg-park-green/90"
+                  className="bg-blue-600 hover:bg-blue-700"
                 >
-                  Agregar Maravilla
+                  Agregar
                 </Button>
               </div>
             </div>
@@ -222,213 +187,115 @@ export const WondersAdmin = () => {
         </Dialog>
       </div>
 
-      {/* Estadísticas */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              <Globe className="w-5 h-5 text-park-blue" />
-              <div>
-                <p className="text-sm text-gray-600">Total de Maravillas</p>
-                <p className="text-xl font-semibold">{wonders.length}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              <Eye className="w-5 h-5 text-green-500" />
-              <div>
-                <p className="text-sm text-gray-600">Activas</p>
-                <p className="text-xl font-semibold text-green-600">
-                  {activeWonders.length}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-2">
-              <EyeOff className="w-5 h-5 text-gray-400" />
-              <div>
-                <p className="text-sm text-gray-600">Inactivas</p>
-                <p className="text-xl font-semibold text-gray-500">
-                  {inactiveWonders.length}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Lista de maravillas activas */}
+      {/* Lista de tarjetas */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
-            <Eye className="w-5 h-5 text-green-500" />
-            <span>Maravillas Activas ({activeWonders.length})</span>
+            <Globe className="w-5 h-5 text-blue-600" />
+            <span>Lista de Tarjetas de Maravillas</span>
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {activeWonders.map((wonder) => (
-              <Card key={wonder.id} className="overflow-hidden">
-                <div className="relative">
-                  <img
-                    src={wonder.image}
-                    alt={wonder.name}
-                    className="w-full h-32 object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                    <div className="flex space-x-2">
-                      <Button
-                        size="sm"
-                        variant="secondary"
-                        onClick={() => handleEdit(wonder)}
-                      >
-                        <Edit className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="secondary"
-                        onClick={() => toggleActive(wonder.id)}
-                      >
-                        <EyeOff className="w-4 h-4" />
-                      </Button>
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Button size="sm" variant="destructive">
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>
-                              ¿Eliminar maravilla?
-                            </AlertDialogTitle>
-                            <AlertDialogDescription>
-                              Esta acción no se puede deshacer. La maravilla se
-                              eliminará permanentemente.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                            <AlertDialogAction
-                              onClick={() => handleDelete(wonder.id)}
-                              className="bg-red-600 hover:bg-red-700"
-                            >
-                              Eliminar
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    </div>
-                  </div>
+          <div className="space-y-3">
+            {wonders.map((wonder) => (
+              <div
+                key={wonder.id}
+                className={cn(
+                  "flex items-center space-x-4 p-4 border rounded-lg",
+                  wonder.active
+                    ? "bg-white border-gray-200"
+                    : "bg-gray-100 border-gray-300",
+                )}
+              >
+                <img
+                  src={wonder.image}
+                  alt={wonder.name}
+                  className={cn(
+                    "w-16 h-16 object-cover rounded",
+                    !wonder.active && "grayscale",
+                  )}
+                />
+                <div className="flex-1">
+                  <h4 className="font-medium text-gray-900">{wonder.name}</h4>
+                  <p className="text-sm text-gray-600">{wonder.description}</p>
                 </div>
-                <CardContent className="p-3">
-                  <h4 className="font-semibold text-sm mb-1">{wonder.name}</h4>
-                  <p className="text-xs text-gray-600 mb-2">
-                    {wonder.description}
-                  </p>
-                  <p className="text-xs text-gray-500 line-clamp-2">
-                    {wonder.fullDescription}
-                  </p>
-                </CardContent>
-              </Card>
+                <div className="flex space-x-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleEdit(wonder)}
+                  >
+                    <Edit className="w-4 h-4" />
+                    Editar
+                  </Button>
+
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button size="sm" variant="outline">
+                        <EyeOff className="w-4 h-4" />
+                        Desactivar
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          ¿Desactivar tarjeta?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          La tarjeta se colocará de color gris en la lista y no
+                          se mostrará en el carrusel.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => toggleActive(wonder.id)}
+                        >
+                          Confirmar
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button size="sm" variant="destructive">
+                        <Trash2 className="w-4 h-4" />
+                        Eliminar
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>¿Eliminar tarjeta?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Esta acción no se puede deshacer. La tarjeta se
+                          eliminará permanentemente.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => handleDelete(wonder.id)}
+                          className="bg-red-600 hover:bg-red-700"
+                        >
+                          Eliminar
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
+              </div>
             ))}
+
+            {wonders.length === 0 && (
+              <div className="text-center py-8 text-gray-500">
+                No hay maravillas. Haz clic en "Agregar" para añadir la primera
+                maravilla.
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>
-
-      {/* Lista de maravillas inactivas */}
-      {inactiveWonders.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <EyeOff className="w-5 h-5 text-gray-400" />
-              <span>Maravillas Inactivas ({inactiveWonders.length})</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {inactiveWonders.map((wonder) => (
-                <Card
-                  key={wonder.id}
-                  className={cn("overflow-hidden opacity-60")}
-                >
-                  <div className="relative">
-                    <img
-                      src={wonder.image}
-                      alt={wonder.name}
-                      className="w-full h-32 object-cover grayscale"
-                    />
-                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                      <div className="flex space-x-2">
-                        <Button
-                          size="sm"
-                          variant="secondary"
-                          onClick={() => handleEdit(wonder)}
-                        >
-                          <Edit className="w-4 h-4" />
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="secondary"
-                          onClick={() => toggleActive(wonder.id)}
-                        >
-                          <Eye className="w-4 h-4" />
-                        </Button>
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button size="sm" variant="destructive">
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>
-                                ¿Eliminar maravilla?
-                              </AlertDialogTitle>
-                              <AlertDialogDescription>
-                                Esta acción no se puede deshacer. La maravilla
-                                se eliminará permanentemente.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                              <AlertDialogAction
-                                onClick={() => handleDelete(wonder.id)}
-                                className="bg-red-600 hover:bg-red-700"
-                              >
-                                Eliminar
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </div>
-                    </div>
-                  </div>
-                  <CardContent className="p-3">
-                    <h4 className="font-semibold text-sm mb-1">
-                      {wonder.name}
-                    </h4>
-                    <p className="text-xs text-gray-600 mb-2">
-                      {wonder.description}
-                    </p>
-                    <p className="text-xs text-gray-500 line-clamp-2">
-                      {wonder.fullDescription}
-                    </p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
 
       {/* Modal de edición */}
       <Dialog
@@ -442,8 +309,8 @@ export const WondersAdmin = () => {
           <div className="space-y-4">
             {/* Upload de imagen */}
             <div className="space-y-2">
-              <Label>Imagen de la Maravilla</Label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
+              <Label>Cambiar imagen</Label>
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-blue-400 transition-colors">
                 <div className="text-center">
                   <input
                     type="file"
@@ -472,7 +339,9 @@ export const WondersAdmin = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="edit-name">Nombre de la Maravilla</Label>
+              <Label htmlFor="edit-name">
+                Línea 1: [Nombre de la Maravilla]
+              </Label>
               <Input
                 id="edit-name"
                 value={formData.name}
@@ -481,37 +350,6 @@ export const WondersAdmin = () => {
                 }
                 placeholder="Ej: Cristo Redentor"
                 required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="edit-description">Línea descriptiva</Label>
-              <Input
-                id="edit-description"
-                value={formData.description}
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    description: e.target.value,
-                  }))
-                }
-                placeholder="Ej: Réplica del"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="edit-fullDescription">Descripción completa</Label>
-              <Textarea
-                id="edit-fullDescription"
-                value={formData.fullDescription}
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    fullDescription: e.target.value,
-                  }))
-                }
-                placeholder="Descripción detallada de la maravilla"
-                rows={4}
               />
             </div>
 
@@ -528,9 +366,9 @@ export const WondersAdmin = () => {
               <Button
                 onClick={handleUpdate}
                 disabled={!formData.name || !formData.image}
-                className="bg-park-blue hover:bg-park-blue/90"
+                className="bg-blue-600 hover:bg-blue-700"
               >
-                Actualizar Maravilla
+                Actualizar
               </Button>
             </div>
           </div>
