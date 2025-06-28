@@ -170,21 +170,36 @@ export function useAnimals() {
 
   useEffect(() => {
     refresh();
+
+    const handleStorageChange = () => {
+      refresh();
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("adminDataChange", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("adminDataChange", handleStorageChange);
+    };
   }, []);
 
   const add = (animal: Omit<Animal, "id">) => {
     adminStorage.addAnimal(animal);
     refresh();
+    window.dispatchEvent(new CustomEvent("adminDataChange"));
   };
 
   const update = (id: number, animal: Partial<Animal>) => {
     adminStorage.updateAnimal(id, animal);
     refresh();
+    window.dispatchEvent(new CustomEvent("adminDataChange"));
   };
 
   const remove = (id: number) => {
     adminStorage.deleteAnimal(id);
     refresh();
+    window.dispatchEvent(new CustomEvent("adminDataChange"));
   };
 
   const toggleActive = (id: number) => {
