@@ -1,36 +1,21 @@
 import { useState, useEffect } from "react";
 import { MapPin, Users, Gamepad2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useGroupImages } from "@/hooks/useAdminData";
 
 export const GroupPricing = () => {
   const [currentImage, setCurrentImage] = useState(0);
+  const { groupImages: adminImages } = useGroupImages();
 
-  const carouselImages = [
-    {
-      id: 1,
-      src: "/placeholder.svg",
-      alt: "Grupo disfrutando en el parque",
-      caption: "Diversión familiar garantizada",
-    },
-    {
-      id: 2,
-      src: "/placeholder.svg",
-      alt: "Actividades en el zoológico",
-      caption: "Experiencias educativas únicas",
-    },
-    {
-      id: 3,
-      src: "/placeholder.svg",
-      alt: "Zonas deportivas del parque",
-      caption: "Espacios deportivos amplios",
-    },
-    {
-      id: 4,
-      src: "/placeholder.svg",
-      alt: "Área de picnic grupal",
-      caption: "Perfectos para celebraciones",
-    },
-  ];
+  // Filtrar solo las imágenes activas para mostrar en el carrusel
+  const carouselImages = adminImages
+    .filter((image) => image.active)
+    .map((image) => ({
+      id: image.id,
+      src: image.image,
+      alt: image.alt,
+      caption: image.caption,
+    }));
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -52,7 +37,10 @@ export const GroupPricing = () => {
                 style={{ transform: `translateX(-${currentImage * 100}%)` }}
               >
                 {carouselImages.map((image) => (
-                  <div key={image.id} className="flex-shrink-0 w-full h-full relative">
+                  <div
+                    key={image.id}
+                    className="flex-shrink-0 w-full h-full relative"
+                  >
                     <img
                       src={image.src}
                       alt={image.alt}
@@ -79,7 +67,7 @@ export const GroupPricing = () => {
                     "w-3 h-3 rounded-full transition-all duration-300 mx-1",
                     currentImage === index
                       ? "bg-park-orange scale-125"
-                      : "bg-white bg-opacity-50 hover:bg-park-orange"
+                      : "bg-white bg-opacity-50 hover:bg-park-orange",
                   )}
                   aria-label={`Ir a imagen ${index + 1}`}
                 />
