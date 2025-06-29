@@ -1,7 +1,5 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
-import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
