@@ -147,6 +147,36 @@ export const GroupsAdmin = () => {
                 </div>
               </div>
 
+              {/* Campo Alt */}
+              <div className="space-y-2">
+                <Label htmlFor="alt-add">Texto alternativo</Label>
+                <Input
+                  id="alt-add"
+                  value={formData.alt}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, alt: e.target.value }))
+                  }
+                  placeholder="Descripción de la imagen para accesibilidad"
+                />
+              </div>
+
+              {/* Campo Caption */}
+              <div className="space-y-2">
+                <Label htmlFor="caption-add">Texto de la imagen</Label>
+                <Textarea
+                  id="caption-add"
+                  value={formData.caption}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      caption: e.target.value,
+                    }))
+                  }
+                  placeholder="Texto que aparecerá sobre la imagen en el carrusel"
+                  rows={2}
+                />
+              </div>
+
               <div className="flex justify-end space-x-2">
                 <Button
                   variant="outline"
