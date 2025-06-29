@@ -197,9 +197,6 @@ export const WondersSection = () => {
             )}
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseUp}
           >
             {wonders.map((wonder) => (
               <Card
