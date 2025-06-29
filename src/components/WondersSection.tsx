@@ -40,36 +40,8 @@ export const WondersSection = () => {
     e.preventDefault();
     setIsDragging(true);
     setHasMoved(false);
-    setStartX(e.pageX - (carouselRef.current?.offsetLeft || 0));
+    setStartX(e.pageX);
     setScrollLeft(carouselRef.current?.scrollLeft || 0);
-  };
-
-  /**
-   * Centra la tarjeta más cercana al centro
-   */
-  const centerNearestCard = () => {
-    if (!carouselRef.current) return;
-
-    const carousel = carouselRef.current;
-    const cardWidth = 384; // w-96 = 384px (including gap)
-    const containerWidth = carousel.clientWidth;
-    const scrollLeft = carousel.scrollLeft;
-
-    // Calcular qué tarjeta está más cerca del centro
-    const centerPosition = scrollLeft + containerWidth / 2;
-    const nearestCardIndex = Math.round((centerPosition - 48) / cardWidth); // 48px = gap/padding
-
-    // Calcular posición objetivo para centrar la tarjeta
-    const targetScrollLeft =
-      nearestCardIndex * cardWidth + 48 - containerWidth / 2 + cardWidth / 2;
-
-    carousel.scrollTo({
-      left: Math.max(
-        0,
-        Math.min(targetScrollLeft, carousel.scrollWidth - containerWidth),
-      ),
-      behavior: "smooth",
-    });
   };
 
   /**
@@ -110,18 +82,13 @@ export const WondersSection = () => {
       if (!isDragging || !carouselRef.current) return;
       e.preventDefault();
       setHasMoved(true);
-      const x = e.pageX - (carouselRef.current.offsetLeft || 0);
-      const walk = (x - startX) * 1.5;
-      carouselRef.current.scrollLeft = scrollLeft - walk;
+      const deltaX = e.pageX - startX;
+      carouselRef.current.scrollLeft = scrollLeft - deltaX;
     };
 
     const handleGlobalMouseUp = () => {
       if (!isDragging) return;
       setIsDragging(false);
-      // Centrar después de soltar el drag
-      setTimeout(() => {
-        centerNearestCard();
-      }, 50);
     };
 
     if (isDragging) {
@@ -138,32 +105,6 @@ export const WondersSection = () => {
       };
     }
   }, [isDragging, startX, scrollLeft]);
-
-  /**
-   * Maneja el scroll para centrado automático
-   */
-  useEffect(() => {
-    const carousel = carouselRef.current;
-    if (!carousel) return;
-
-    let scrollTimeout: NodeJS.Timeout;
-
-    const handleScroll = () => {
-      if (isDragging) return; // No centrar mientras se está draggeando
-
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(() => {
-        centerNearestCard();
-      }, 150); // Esperar a que termine el scroll
-    };
-
-    carousel.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => {
-      carousel.removeEventListener("scroll", handleScroll);
-      clearTimeout(scrollTimeout);
-    };
-  }, [isDragging]);
 
   return (
     <section id="maravillas" className="py-16 bg-gray-50">
