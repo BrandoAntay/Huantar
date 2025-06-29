@@ -109,9 +109,15 @@ export const MapAdmin = () => {
               src={mapData.image}
               alt="Mapa del parque"
               className={cn(
-                "w-24 h-24 object-cover rounded",
+                "w-24 h-24 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity",
                 !mapData.active && "grayscale",
               )}
+              onClick={() =>
+                window.open(
+                  `/mapa-grande?img=${encodeURIComponent(mapData.image)}`,
+                  "_blank",
+                )
+              }
             />
             <div className="flex-1">
               <h4 className="font-medium text-gray-900">Mapa del Parque</h4>
@@ -166,7 +172,7 @@ export const MapAdmin = () => {
 
       {/* Modal de edición */}
       <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Editar Mapa del Parque</DialogTitle>
           </DialogHeader>
