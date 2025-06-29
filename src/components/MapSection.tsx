@@ -45,12 +45,13 @@ export const MapSection = () => {
             <img
               src={mapImage}
               alt="Mapa del Parque Zonal Chavín de Huántar"
-              className="w-full h-auto object-contain"
+              className="w-full h-auto object-contain cursor-pointer hover:opacity-90 transition-opacity duration-200"
               style={{
                 backgroundColor: "#054986",
                 minHeight: "400px",
                 maxHeight: "600px",
               }}
+              onClick={() => setIsModalOpen(true)}
             />
 
             {/* Overlay con información */}
