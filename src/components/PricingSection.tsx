@@ -22,17 +22,15 @@ interface PriceOption {
 export const PricingSection = () => {
   const { priceOptions: adminPriceOptions } = usePriceOptions();
 
-  // Filtrar solo las opciones activas y mapear al formato correcto
-  const priceOptions: PriceOption[] = adminPriceOptions
-    .filter((option) => option.active)
-    .map((option) => ({
-      id: option.id,
-      price: option.price,
-      category: option.category,
-      ageRange: option.ageRange,
-      description: option.description,
-      popular: option.category === "Niños", // Mantener lógica de popular para niños
-    }));
+  // Mostrar todas las opciones de precio y mapear al formato correcto
+  const priceOptions: PriceOption[] = adminPriceOptions.map((option) => ({
+    id: option.id,
+    price: option.price,
+    category: option.category,
+    ageRange: option.ageRange,
+    description: option.description,
+    popular: option.category === "Niños", // Mantener lógica de popular para niños
+  }));
 
   /**
    * Formatea el precio para mostrar

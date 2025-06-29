@@ -16,8 +16,8 @@ export const HeroCarousel = () => {
   const carouselRef = useRef<HTMLDivElement>(null);
   const { slides: allSlides } = useHeroSlides();
 
-  // Filtrar solo los slides activos para mostrar en el carrusel
-  const slides = allSlides.filter((slide) => slide.active);
+  // Mostrar todos los slides del carrusel
+  const slides = allSlides;
 
   /**
    * Efecto para cambio automático de slides cada 5 segundos
