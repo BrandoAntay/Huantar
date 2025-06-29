@@ -45,32 +45,6 @@ export const WondersSection = () => {
   };
 
   /**
-   * Maneja el movimiento durante el arrastre
-   */
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging || !carouselRef.current) return;
-    e.preventDefault();
-    setHasMoved(true);
-    const x = e.pageX - (carouselRef.current.offsetLeft || 0);
-    const walk = (x - startX) * 1.5;
-    carouselRef.current.scrollLeft = scrollLeft - walk;
-  };
-
-  /**
-   * Finaliza el proceso de arrastre
-   */
-  const handleMouseUp = () => {
-    setIsDragging(false);
-
-    // Centrar la tarjeta más visible después del arrastre
-    if (carouselRef.current) {
-      setTimeout(() => {
-        centerNearestCard();
-      }, 100);
-    }
-  };
-
-  /**
    * Centra la tarjeta más cercana al centro
    */
   const centerNearestCard = () => {
