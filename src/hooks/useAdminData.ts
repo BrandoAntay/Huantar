@@ -100,14 +100,7 @@ export function useHeroSlides() {
     window.dispatchEvent(new CustomEvent("adminDataChange"));
   };
 
-  const toggleActive = (id: number) => {
-    const slide = slides.find((s) => s.id === id);
-    if (slide) {
-      update(id, { active: !slide.active });
-    }
-  };
-
-  return { slides, add, update, remove, toggleActive, refresh };
+  return { slides, add, update, remove, refresh };
 }
 
 export function useWonders() {
@@ -151,14 +144,7 @@ export function useWonders() {
     window.dispatchEvent(new CustomEvent("adminDataChange"));
   };
 
-  const toggleActive = (id: number) => {
-    const wonder = wonders.find((w) => w.id === id);
-    if (wonder) {
-      update(id, { active: !wonder.active });
-    }
-  };
-
-  return { wonders, add, update, remove, toggleActive, refresh };
+  return { wonders, add, update, remove, refresh };
 }
 
 export function useAnimals() {
@@ -202,14 +188,7 @@ export function useAnimals() {
     window.dispatchEvent(new CustomEvent("adminDataChange"));
   };
 
-  const toggleActive = (id: number) => {
-    const animal = animals.find((a) => a.id === id);
-    if (animal) {
-      update(id, { active: !animal.active });
-    }
-  };
-
-  return { animals, add, update, remove, toggleActive, refresh };
+  return { animals, add, update, remove, refresh };
 }
 
 export function usePriceOptions() {
@@ -253,14 +232,7 @@ export function usePriceOptions() {
     window.dispatchEvent(new CustomEvent("adminDataChange"));
   };
 
-  const toggleActive = (id: number) => {
-    const option = priceOptions.find((p) => p.id === id);
-    if (option) {
-      update(id, { active: !option.active });
-    }
-  };
-
-  return { priceOptions, add, update, remove, toggleActive, refresh };
+  return { priceOptions, add, update, remove, refresh };
 }
 
 export function useGroupImages() {
@@ -304,14 +276,7 @@ export function useGroupImages() {
     window.dispatchEvent(new CustomEvent("adminDataChange"));
   };
 
-  const toggleActive = (id: number) => {
-    const image = groupImages.find((i) => i.id === id);
-    if (image) {
-      update(id, { active: !image.active });
-    }
-  };
-
-  return { groupImages, add, update, remove, toggleActive, refresh };
+  return { groupImages, add, update, remove, refresh };
 }
 
 export function useMapData() {
