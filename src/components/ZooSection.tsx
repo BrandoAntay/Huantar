@@ -17,11 +17,29 @@ export const ZooSection = () => {
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(
     null,
   );
-  const animalsPerPage = 6;
   const { animals: adminAnimals } = useAnimals();
 
   // Filtrar solo los animales activos
   const allAnimals: Animal[] = adminAnimals.filter((animal) => animal.active);
+
+  // Responsive animals per page: 6 on desktop, 3 on mobile/tablet
+  const getAnimalsPerPage = () => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth < 1024 ? 3 : 6;
+    }
+    return 6;
+  };
+
+  const [animalsPerPage, setAnimalsPerPage] = useState(getAnimalsPerPage());
+
+  useEffect(() => {
+    const handleResize = () => {
+      setAnimalsPerPage(getAnimalsPerPage());
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const totalPages = Math.ceil(allAnimals.length / animalsPerPage);
   const startIndex = (currentPage - 1) * animalsPerPage;
@@ -46,6 +64,16 @@ export const ZooSection = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  const handleCardClick = (index: number) => {
+    setSelectedImageIndex(index);
+  };
+
+  const handleModalBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      setSelectedImageIndex(null);
+    }
+  };
+
   return (
     <section id="zoologia" className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -60,7 +88,8 @@ export const ZooSection = () => {
           {currentAnimals.map((animal, index) => (
             <Card
               key={animal.id}
-              className="group relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 h-96"
+              className="group relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 h-96 cursor-pointer"
+              onClick={() => handleCardClick(index)}
             >
               <div className="relative h-full w-full">
                 <img
@@ -83,8 +112,11 @@ export const ZooSection = () => {
                     <Button
                       size="sm"
                       variant="secondary"
-                      onClick={() => setSelectedImageIndex(index)}
-                      className="mt-4"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedImageIndex(index);
+                      }}
+                      className="mt-4 hover:bg-blue-600 hover:text-white transition-colors duration-200"
                     >
                       Ver foto
                     </Button>
@@ -145,12 +177,16 @@ export const ZooSection = () => {
 
       {/* Modal responsive para imagen ampliada */}
       {selectedImageIndex !== null && (
-        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center px-4">
+        <div
+          className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center px-4"
+          onClick={handleModalBackdropClick}
+        >
           <div className="relative">
             <img
               src={currentAnimals[selectedImageIndex].image}
               alt="Foto ampliada"
               className="max-w-[80vw] max-h-[80vh] w-auto h-auto rounded shadow-lg mx-auto"
+              onClick={(e) => e.stopPropagation()}
             />
 
             {/* Botón cerrar */}
