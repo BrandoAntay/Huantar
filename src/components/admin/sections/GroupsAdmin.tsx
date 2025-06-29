@@ -67,7 +67,8 @@ export const GroupsAdmin = () => {
   };
 
   const handleUpdate = () => {
-    if (!editingImage || !formData.image || !formData.alt || !formData.caption) return;
+    if (!editingImage || !formData.image || !formData.alt || !formData.caption)
+      return;
 
     update(editingImage.id, {
       image: formData.image,
@@ -75,6 +76,10 @@ export const GroupsAdmin = () => {
       caption: formData.caption,
       active: editingImage.active,
     });
+
+    resetForm();
+    setEditingImage(null);
+  };
 
   const handleDelete = (id: number) => {
     remove(id);
