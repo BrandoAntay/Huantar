@@ -21,6 +21,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { Plus, Edit, Trash2, EyeOff, Upload, Users } from "lucide-react";
 import type { GroupImage } from "@/lib/adminStorage";
