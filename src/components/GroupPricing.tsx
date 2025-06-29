@@ -28,6 +28,27 @@ export const GroupPricing = () => {
     return () => clearInterval(timer);
   }, [carouselImages.length]);
 
+  /**
+   * Navega a la imagen anterior (solo si no es la primera)
+   */
+  const goToPrevious = () => {
+    if (currentImage > 0) {
+      setCurrentImage((prev) => prev - 1);
+    }
+  };
+
+  /**
+   * Navega a la imagen siguiente (solo si no es la última)
+   */
+  const goToNext = () => {
+    if (currentImage < carouselImages.length - 1) {
+      setCurrentImage((prev) => prev + 1);
+    }
+  };
+
+  /**
+   * Manejo de eventos de arrastre
+   */
   const handleMouseDown = (e: React.MouseEvent) => {
     setIsDragging(true);
     setStartX(e.clientX);
@@ -43,13 +64,15 @@ export const GroupPricing = () => {
   const handleMouseUp = () => {
     if (!isDragging) return;
 
-    const threshold = 50;
+    const threshold = 50; // Distancia mínima para cambiar slide
 
     if (Math.abs(dragDistance) > threshold) {
       if (dragDistance > 0 && currentImage > 0) {
-        setCurrentImage((prev) => prev - 1);
+        // Deslizar hacia la derecha (imagen anterior)
+        goToPrevious();
       } else if (dragDistance < 0 && currentImage < carouselImages.length - 1) {
-        setCurrentImage((prev) => prev + 1);
+        // Deslizar hacia la izquierda (imagen siguiente)
+        goToNext();
       }
     }
 
