@@ -1,7 +1,5 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
-import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -38,7 +36,7 @@ const WonderDetail = () => {
         image: "/placeholder.svg",
         description: "Réplica del",
         fullDescription:
-        "Contempla esta icónica estatua que se alza sobre la ciudad de Río de Janeiro. El Cristo Redentor es símbolo de fe y acogida, reconocido mundialmente como una de las nuevas maravillas del mundo.",
+          "Contempla esta icónica estatua que se alza sobre la ciudad de Río de Janeiro. El Cristo Redentor es símbolo de fe y acogida, reconocido mundialmente como una de las nuevas maravillas del mundo.",
       },
       "2": {
         id: 2,
@@ -46,7 +44,7 @@ const WonderDetail = () => {
         image: "/placeholder.svg",
         description: "Réplica de",
         fullDescription:
-        "Explora la ciudadela inca más famosa del mundo, suspendida entre las montañas de los Andes. Machu Picchu representa la cumbre de la ingeniería y espiritualidad de la civilización inca.",
+          "Explora la ciudadela inca más famosa del mundo, suspendida entre las montañas de los Andes. Machu Picchu representa la cumbre de la ingeniería y espiritualidad de la civilización inca.",
       },
     };
 
@@ -63,9 +61,16 @@ const WonderDetail = () => {
   }, []);
 
   /**
-   * Maneja el regreso a la página principal
+   * Navega a la homepage
    */
-  const handleGoBack = () => {
+  const handleGoToHome = () => {
+    navigate("/");
+  };
+
+  /**
+   * Navega a la sección de maravillas en la homepage
+   */
+  const handleGoToWonders = () => {
     navigate("/");
     // Hacer scroll a la sección de maravillas después de un breve delay
     setTimeout(() => {
@@ -82,23 +87,24 @@ const WonderDetail = () => {
 
       {/* Contenido principal con espaciado para navbar fija */}
       <main className="pt-16">
-        {/* Header con botón de regreso */}
+        {/* Header con breadcrumb */}
         <div className="bg-white border-b border-gray-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <Button
-              variant="outline"
-              onClick={handleGoBack}
-              className="mb-4 hover:bg-park-blue hover:text-white transition-colors duration-200"
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Volver a Maravillas
-            </Button>
-
-            <div className="flex items-center space-x-2 text-sm text-gray-500">
-              <span>Inicio</span>
-              <span>/</span>
-              <span>Maravillas</span>
-              <span>/</span>
+            <div className="flex items-center space-x-2 text-sm">
+              <button
+                onClick={handleGoToHome}
+                className="text-gray-500 hover:text-park-blue transition-colors duration-200 cursor-pointer"
+              >
+                Inicio
+              </button>
+              <span className="text-gray-400">/</span>
+              <button
+                onClick={handleGoToWonders}
+                className="text-gray-500 hover:text-park-blue transition-colors duration-200 cursor-pointer"
+              >
+                Maravillas
+              </button>
+              <span className="text-gray-400">/</span>
               <span className="text-park-blue font-medium">
                 {currentWonder.name}
               </span>

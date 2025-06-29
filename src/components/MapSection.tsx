@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Expand, X } from "lucide-react";
+import { useMapData } from "@/hooks/useAdminData";
 
 /**
  * Sección del mapa del parque con vista ampliada modal
@@ -14,8 +15,14 @@ import { Expand, X } from "lucide-react";
  */
 export const MapSection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const mapImage =
-    "https://images.unsplash.com/photo-1553028826-f4804a6dba3b?auto=format&fit=crop&w=1200&q=80"; // Mapa de parque libre de copyright
+  const { mapData } = useMapData();
+
+  // Si el mapa no está activo, no mostrar la sección
+  if (!mapData || !mapData.active) {
+    return null;
+  }
+
+  const mapImage = mapData.image;
 
   return (
     <section id="mapa" className="py-16 bg-white">
@@ -38,12 +45,13 @@ export const MapSection = () => {
             <img
               src={mapImage}
               alt="Mapa del Parque Zonal Chavín de Huántar"
-              className="w-full h-auto object-contain"
+              className="w-full h-auto object-contain cursor-pointer hover:opacity-90 transition-opacity duration-200"
               style={{
                 backgroundColor: "#054986",
                 minHeight: "400px",
                 maxHeight: "600px",
               }}
+              onClick={() => setIsModalOpen(true)}
             />
 
             {/* Overlay con información */}
