@@ -26,7 +26,7 @@ import { Plus, Edit, Trash2, EyeOff, Upload, Users } from "lucide-react";
 import type { GroupImage } from "@/lib/adminStorage";
 
 export const GroupsAdmin = () => {
-  const { groupImages, add, update, remove, toggleActive } = useGroupImages();
+  const { groupImages, add, update, remove } = useGroupImages();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [editingImage, setEditingImage] = useState<GroupImage | null>(null);
   const [formData, setFormData] = useState({

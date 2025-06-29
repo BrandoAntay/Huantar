@@ -28,7 +28,7 @@ import { Plus, Edit, Trash2, EyeOff, Upload, PawPrint } from "lucide-react";
 import type { Animal } from "@/lib/adminStorage";
 
 export const ZooAdmin = () => {
-  const { animals, add, update, remove, toggleActive } = useAnimals();
+  const { animals, add, update, remove } = useAnimals();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [editingAnimal, setEditingAnimal] = useState<Animal | null>(null);
   const [formData, setFormData] = useState({

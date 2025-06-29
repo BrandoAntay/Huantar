@@ -27,7 +27,7 @@ import { Plus, Edit, Trash2, EyeOff, Upload, Globe } from "lucide-react";
 import type { Wonder } from "@/lib/adminStorage";
 
 export const WondersAdmin = () => {
-  const { wonders, add, update, remove, toggleActive } = useWonders();
+  const { wonders, add, update, remove } = useWonders();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [editingWonder, setEditingWonder] = useState<Wonder | null>(null);
   const [formData, setFormData] = useState({

@@ -28,7 +28,7 @@ import { Plus, Edit, Trash2, EyeOff, Upload, Camera } from "lucide-react";
 import type { HeroSlide } from "@/lib/adminStorage";
 
 export const HeroCarouselAdmin = () => {
-  const { slides, add, update, remove, toggleActive } = useHeroSlides();
+  const { slides, add, update, remove } = useHeroSlides();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [editingSlide, setEditingSlide] = useState<HeroSlide | null>(null);
   const [formData, setFormData] = useState({

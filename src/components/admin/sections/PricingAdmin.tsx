@@ -36,7 +36,7 @@ const colorOptions = [
 ];
 
 export const PricingAdmin = () => {
-  const { priceOptions, add, update, remove, toggleActive } = usePriceOptions();
+  const { priceOptions, add, update, remove } = usePriceOptions();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [editingOption, setEditingOption] = useState<PriceOption | null>(null);
   const [formData, setFormData] = useState({
