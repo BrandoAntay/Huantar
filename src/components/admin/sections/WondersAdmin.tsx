@@ -112,7 +112,7 @@ export const WondersAdmin = () => {
               Agregar
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Agregar Nueva Maravilla</DialogTitle>
             </DialogHeader>
@@ -139,15 +139,6 @@ export const WondersAdmin = () => {
                       </p>
                     </label>
                   </div>
-                  {formData.image && (
-                    <div className="mt-4">
-                      <img
-                        src={formData.image}
-                        alt="Preview"
-                        className="w-full h-32 object-cover rounded"
-                      />
-                    </div>
-                  )}
                 </div>
               </div>
 
@@ -228,34 +219,6 @@ export const WondersAdmin = () => {
                     <Edit className="w-4 h-4" />
                     Editar
                   </Button>
-
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button size="sm" variant="outline">
-                        <EyeOff className="w-4 h-4" />
-                        Desactivar
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          ¿Desactivar tarjeta?
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          La tarjeta se colocará de color gris en la lista y no
-                          se mostrará en el carrusel.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={() => toggleActive(wonder.id)}
-                        >
-                          Confirmar
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
 
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
