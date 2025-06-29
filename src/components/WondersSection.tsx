@@ -77,20 +77,23 @@ export const WondersSection = () => {
     if (!carouselRef.current) return;
 
     const carousel = carouselRef.current;
-    const cardWidth = 320; // w-80 = 320px
+    const cardWidth = 384; // w-96 = 384px (including gap)
     const containerWidth = carousel.clientWidth;
     const scrollLeft = carousel.scrollLeft;
 
     // Calcular qué tarjeta está más cerca del centro
     const centerPosition = scrollLeft + containerWidth / 2;
-    const nearestCardIndex = Math.round(centerPosition / cardWidth);
+    const nearestCardIndex = Math.round((centerPosition - 48) / cardWidth); // 48px = gap/padding
 
-    // Scroll hacia esa tarjeta
+    // Calcular posición objetivo para centrar la tarjeta
     const targetScrollLeft =
-      nearestCardIndex * cardWidth - containerWidth / 2 + cardWidth / 2;
+      nearestCardIndex * cardWidth + 48 - containerWidth / 2 + cardWidth / 2;
 
     carousel.scrollTo({
-      left: Math.max(0, targetScrollLeft),
+      left: Math.max(
+        0,
+        Math.min(targetScrollLeft, carousel.scrollWidth - containerWidth),
+      ),
       behavior: "smooth",
     });
   };
@@ -140,6 +143,10 @@ export const WondersSection = () => {
 
     const handleGlobalMouseUp = () => {
       setIsDragging(false);
+      // Centrar después de soltar el drag
+      setTimeout(() => {
+        centerNearestCard();
+      }, 50);
     };
 
     if (isDragging) {
@@ -152,6 +159,32 @@ export const WondersSection = () => {
       document.removeEventListener("mouseup", handleGlobalMouseUp);
     };
   }, [isDragging, startX, scrollLeft]);
+
+  /**
+   * Maneja el scroll para centrado automático
+   */
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    let scrollTimeout: NodeJS.Timeout;
+
+    const handleScroll = () => {
+      if (isDragging) return; // No centrar mientras se está draggeando
+
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        centerNearestCard();
+      }, 150); // Esperar a que termine el scroll
+    };
+
+    carousel.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      carousel.removeEventListener("scroll", handleScroll);
+      clearTimeout(scrollTimeout);
+    };
+  }, [isDragging]);
 
   return (
     <section id="maravillas" className="py-16 bg-gray-50">
