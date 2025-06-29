@@ -116,6 +116,7 @@ export const WondersSection = () => {
     };
 
     const handleGlobalMouseUp = () => {
+      if (!isDragging) return;
       setIsDragging(false);
       // Centrar después de soltar el drag
       setTimeout(() => {
@@ -126,12 +127,16 @@ export const WondersSection = () => {
     if (isDragging) {
       document.addEventListener("mousemove", handleGlobalMouseMove);
       document.addEventListener("mouseup", handleGlobalMouseUp);
-    }
+      document.body.style.userSelect = "none";
+      document.body.style.cursor = "grabbing";
 
-    return () => {
-      document.removeEventListener("mousemove", handleGlobalMouseMove);
-      document.removeEventListener("mouseup", handleGlobalMouseUp);
-    };
+      return () => {
+        document.removeEventListener("mousemove", handleGlobalMouseMove);
+        document.removeEventListener("mouseup", handleGlobalMouseUp);
+        document.body.style.userSelect = "";
+        document.body.style.cursor = "";
+      };
+    }
   }, [isDragging, startX, scrollLeft]);
 
   /**
