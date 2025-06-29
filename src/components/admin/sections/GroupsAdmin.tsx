@@ -67,14 +67,14 @@ export const GroupsAdmin = () => {
   };
 
   const handleUpdate = () => {
-    if (!editingImage || !formData.image) return;
+    if (!editingImage || !formData.image || !formData.alt || !formData.caption) return;
 
     update(editingImage.id, {
       image: formData.image,
+      alt: formData.alt,
+      caption: formData.caption,
+      active: editingImage.active,
     });
-    resetForm();
-    setEditingImage(null);
-  };
 
   const handleDelete = (id: number) => {
     remove(id);
