@@ -248,18 +248,10 @@ export const PricingAdmin = () => {
             {priceOptions.map((option) => (
               <div
                 key={option.id}
-                className={cn(
-                  "flex items-center space-x-4 p-4 border rounded-lg",
-                  option.active
-                    ? "bg-white border-gray-200"
-                    : "bg-gray-100 border-gray-300",
-                )}
+                className="flex items-center space-x-4 p-4 border rounded-lg bg-white border-gray-200"
               >
                 <div
-                  className={cn(
-                    "w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-sm",
-                    !option.active && "grayscale",
-                  )}
+                  className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-sm"
                   style={{ backgroundColor: option.color }}
                 >
                   {formatPrice(option.price)}

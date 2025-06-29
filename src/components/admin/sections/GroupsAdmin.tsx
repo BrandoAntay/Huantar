@@ -170,20 +170,12 @@ export const GroupsAdmin = () => {
             {groupImages.map((image) => (
               <div
                 key={image.id}
-                className={cn(
-                  "flex items-center space-x-4 p-4 border rounded-lg",
-                  image.active
-                    ? "bg-white border-gray-200"
-                    : "bg-gray-100 border-gray-300",
-                )}
+                className="flex items-center space-x-4 p-4 border rounded-lg bg-white border-gray-200"
               >
                 <img
                   src={image.image}
                   alt={image.alt}
-                  className={cn(
-                    "w-16 h-16 object-cover rounded",
-                    !image.active && "grayscale",
-                  )}
+                  className="w-16 h-16 object-cover rounded"
                 />
                 <div className="flex-1">
                   <h4 className="font-medium text-gray-900">{image.alt}</h4>

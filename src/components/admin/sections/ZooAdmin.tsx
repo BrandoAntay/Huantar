@@ -234,20 +234,12 @@ export const ZooAdmin = () => {
             {animals.map((animal) => (
               <div
                 key={animal.id}
-                className={cn(
-                  "flex items-center space-x-4 p-4 border rounded-lg",
-                  animal.active
-                    ? "bg-white border-gray-200"
-                    : "bg-gray-100 border-gray-300",
-                )}
+                className="flex items-center space-x-4 p-4 border rounded-lg bg-white border-gray-200"
               >
                 <img
                   src={animal.image}
                   alt={animal.name}
-                  className={cn(
-                    "w-16 h-16 object-cover rounded",
-                    !animal.active && "grayscale",
-                  )}
+                  className="w-16 h-16 object-cover rounded"
                 />
                 <div className="flex-1">
                   <h4 className="font-medium text-gray-900">{animal.name}</h4>
