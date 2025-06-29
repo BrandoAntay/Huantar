@@ -5,6 +5,9 @@ import { useGroupImages } from "@/hooks/useAdminData";
 
 export const GroupPricing = () => {
   const [currentImage, setCurrentImage] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [dragDistance, setDragDistance] = useState(0);
   const { groupImages: adminImages } = useGroupImages();
 
   // Filtrar solo las imágenes activas para mostrar en el carrusel
@@ -27,16 +30,75 @@ export const GroupPricing = () => {
     return () => clearInterval(timer);
   }, [carouselImages.length]);
 
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    setStartX(e.clientX);
+    setDragDistance(0);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    const distance = e.clientX - startX;
+    setDragDistance(distance);
+  };
+
+  const handleMouseUp = () => {
+    if (!isDragging) return;
+
+    const threshold = 50;
+
+    if (Math.abs(dragDistance) > threshold) {
+      if (dragDistance > 0 && currentImage > 0) {
+        setCurrentImage((prev) => prev - 1);
+      } else if (dragDistance < 0 && currentImage < carouselImages.length - 1) {
+        setCurrentImage((prev) => prev + 1);
+      }
+    }
+
+    setIsDragging(false);
+    setDragDistance(0);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setIsDragging(true);
+    setStartX(e.touches[0].clientX);
+    setDragDistance(0);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging) return;
+    const distance = e.touches[0].clientX - startX;
+    setDragDistance(distance);
+  };
+
+  const handleTouchEnd = () => {
+    handleMouseUp();
+  };
+
   return (
     <section className="py-16 bg-gradient-to-br from-park-blue to-park-blue-dark text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Lado izquierdo - Carrusel */}
           <div className="relative">
-            <div className="relative h-80 sm:h-96 rounded-2xl overflow-hidden shadow-2xl">
+            <div
+              className="relative h-80 sm:h-96 rounded-2xl overflow-hidden shadow-2xl select-none"
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={handleMouseUp}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+            >
               <div
-                className="flex transition-transform duration-700 ease-in-out h-full"
-                style={{ transform: `translateX(-${currentImage * 100}%)` }}
+                className={cn(
+                  "flex h-full transition-transform duration-700 ease-in-out",
+                  isDragging && "transition-none",
+                )}
+                style={{
+                  transform: `translateX(calc(-${currentImage * 100}% + ${isDragging ? dragDistance : 0}px))`,
+                }}
               >
                 {carouselImages.map((image) => (
                   <div
@@ -85,9 +147,9 @@ export const GroupPricing = () => {
             </div>
 
             {/* Cosas que incluye el combo*/}
-            <div className="flex items-start justify-between flex-wrap gap-6">
+            <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-6">
               {/* Incluye */}
-              <div className="space-y-4 max-w-md">
+              <div className="space-y-4 max-w-md order-2 lg:order-1">
                 <h3 className="text-xl font-semibold text-park-orange">
                   Incluye:
                 </h3>
@@ -117,7 +179,7 @@ export const GroupPricing = () => {
               </div>
 
               {/* Precio individual */}
-              <div className="flex flex-col items-center justify-center bg-red-600 text-white rounded-full w-36 h-36 shadow-xl shrink-0">
+              <div className="flex flex-col items-center justify-center bg-red-600 text-white rounded-full w-36 h-36 shadow-xl shrink-0 order-1 lg:order-2">
                 <span className="text-sm font-medium text-center">
                   Tarifa individual
                 </span>
