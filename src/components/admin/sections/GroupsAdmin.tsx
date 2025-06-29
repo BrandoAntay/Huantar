@@ -31,11 +31,15 @@ export const GroupsAdmin = () => {
   const [editingImage, setEditingImage] = useState<GroupImage | null>(null);
   const [formData, setFormData] = useState({
     image: "",
+    alt: "",
+    caption: "",
   });
 
   const resetForm = () => {
     setFormData({
       image: "",
+      alt: "",
+      caption: "",
     });
   };
 
