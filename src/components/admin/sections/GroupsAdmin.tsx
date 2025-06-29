@@ -44,12 +44,12 @@ export const GroupsAdmin = () => {
   };
 
   const handleAdd = () => {
-    if (!formData.image) return;
+    if (!formData.image || !formData.alt || !formData.caption) return;
 
     add({
       image: formData.image,
-      alt: "Imagen del carrusel de grupos grandes",
-      caption: "Experiencia grupal en el parque",
+      alt: formData.alt,
+      caption: formData.caption,
       active: true,
     });
 
