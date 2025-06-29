@@ -124,7 +124,7 @@ export const PricingAdmin = () => {
               Agregar
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Agregar Nueva Categoría de Precio</DialogTitle>
             </DialogHeader>
@@ -284,32 +284,6 @@ export const PricingAdmin = () => {
                     <Edit className="w-4 h-4" />
                     Editar
                   </Button>
-
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button size="sm" variant="outline">
-                        <EyeOff className="w-4 h-4" />
-                        Desactivar
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>¿Desactivar card?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          La card se colocará de color gris en la lista y no se
-                          mostrará en la sección.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={() => toggleActive(option.id)}
-                        >
-                          Confirmar
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
 
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
