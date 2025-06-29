@@ -58,10 +58,12 @@ export const GroupsAdmin = () => {
   };
 
   const handleEdit = (image: GroupImage) => {
+    setEditingImage(image);
     setFormData({
       image: image.image,
+      alt: image.alt,
+      caption: image.caption,
     });
-    setEditingImage(image);
   };
 
   const handleUpdate = () => {
