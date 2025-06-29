@@ -189,7 +189,9 @@ export const GroupsAdmin = () => {
                 </Button>
                 <Button
                   onClick={handleAdd}
-                  disabled={!formData.image}
+                  disabled={
+                    !formData.image || !formData.alt || !formData.caption
+                  }
                   className="bg-blue-600 hover:bg-blue-700"
                 >
                   Agregar
