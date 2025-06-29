@@ -50,18 +50,20 @@ export const GroupPricing = () => {
    * Manejo de eventos de arrastre
    */
   const handleMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
     setIsDragging(true);
     setStartX(e.clientX);
     setDragDistance(0);
   };
 
-  const handleMouseMove = (e: React.MouseEvent) => {
+  const handleGlobalMouseMove = (e: MouseEvent) => {
     if (!isDragging) return;
+    e.preventDefault();
     const distance = e.clientX - startX;
     setDragDistance(distance);
   };
 
-  const handleMouseUp = () => {
+  const handleGlobalMouseUp = () => {
     if (!isDragging) return;
 
     const threshold = 50; // Distancia mínima para cambiar slide
@@ -81,6 +83,7 @@ export const GroupPricing = () => {
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
+    e.preventDefault();
     setIsDragging(true);
     setStartX(e.touches[0].clientX);
     setDragDistance(0);
@@ -88,13 +91,46 @@ export const GroupPricing = () => {
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (!isDragging) return;
+    e.preventDefault();
     const distance = e.touches[0].clientX - startX;
     setDragDistance(distance);
   };
 
   const handleTouchEnd = () => {
-    handleMouseUp();
+    if (!isDragging) return;
+
+    const threshold = 50; // Distancia mínima para cambiar slide
+
+    if (Math.abs(dragDistance) > threshold) {
+      if (dragDistance > 0 && currentImage > 0) {
+        // Deslizar hacia la derecha (imagen anterior)
+        goToPrevious();
+      } else if (dragDistance < 0 && currentImage < carouselImages.length - 1) {
+        // Deslizar hacia la izquierda (imagen siguiente)
+        goToNext();
+      }
+    }
+
+    setIsDragging(false);
+    setDragDistance(0);
   };
+
+  // Efecto para manejar eventos globales durante el arrastre
+  useEffect(() => {
+    if (isDragging) {
+      document.addEventListener("mousemove", handleGlobalMouseMove);
+      document.addEventListener("mouseup", handleGlobalMouseUp);
+      document.body.style.userSelect = "none";
+      document.body.style.cursor = "grabbing";
+
+      return () => {
+        document.removeEventListener("mousemove", handleGlobalMouseMove);
+        document.removeEventListener("mouseup", handleGlobalMouseUp);
+        document.body.style.userSelect = "";
+        document.body.style.cursor = "";
+      };
+    }
+  }, [isDragging, startX, dragDistance, currentImage, carouselImages.length]);
 
   return (
     <section className="py-16 bg-gradient-to-br from-park-blue to-park-blue-dark text-white">
