@@ -33,12 +33,16 @@ export const WondersAdmin = () => {
   const [formData, setFormData] = useState({
     name: "",
     image: "",
+    description: "Réplica de",
+    fullDescription: "",
   });
 
   const resetForm = () => {
     setFormData({
       name: "",
       image: "",
+      description: "Réplica de",
+      fullDescription: "",
     });
   };
 
@@ -48,8 +52,8 @@ export const WondersAdmin = () => {
     add({
       name: formData.name,
       image: formData.image,
-      description: "Réplica de",
-      fullDescription: `Descripción de ${formData.name}`,
+      description: formData.description,
+      fullDescription: formData.fullDescription,
       active: true,
     });
 
@@ -61,6 +65,8 @@ export const WondersAdmin = () => {
     setFormData({
       name: wonder.name,
       image: wonder.image,
+      description: wonder.description,
+      fullDescription: wonder.fullDescription,
     });
     setEditingWonder(wonder);
   };
@@ -71,6 +77,8 @@ export const WondersAdmin = () => {
     update(editingWonder.id, {
       name: formData.name,
       image: formData.image,
+      description: formData.description,
+      fullDescription: formData.fullDescription,
     });
     resetForm();
     setEditingWonder(null);
@@ -143,7 +151,7 @@ export const WondersAdmin = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="name">Línea 1: [Nombre de la Maravilla]</Label>
+                <Label htmlFor="name">Nombre de la Maravilla</Label>
                 <Input
                   id="name"
                   value={formData.name}
@@ -152,6 +160,41 @@ export const WondersAdmin = () => {
                   }
                   placeholder="Ej: Cristo Redentor"
                   required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="description">
+                  Descripción corta (para tarjeta)
+                </Label>
+                <Input
+                  id="description"
+                  value={formData.description}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      description: e.target.value,
+                    }))
+                  }
+                  placeholder="Ej: Réplica del"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="fullDescription">
+                  Descripción completa (para página de detalle)
+                </Label>
+                <Textarea
+                  id="fullDescription"
+                  value={formData.fullDescription}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      fullDescription: e.target.value,
+                    }))
+                  }
+                  placeholder="Descripción detallada que aparecerá en la página de detalle de la maravilla"
+                  rows={4}
                 />
               </div>
 
@@ -294,9 +337,7 @@ export const WondersAdmin = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="edit-name">
-                Línea 1: [Nombre de la Maravilla]
-              </Label>
+              <Label htmlFor="edit-name">Nombre de la Maravilla</Label>
               <Input
                 id="edit-name"
                 value={formData.name}
@@ -305,6 +346,41 @@ export const WondersAdmin = () => {
                 }
                 placeholder="Ej: Cristo Redentor"
                 required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="edit-description">
+                Descripción corta (para tarjeta)
+              </Label>
+              <Input
+                id="edit-description"
+                value={formData.description}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
+                }
+                placeholder="Ej: Réplica del"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="edit-fullDescription">
+                Descripción completa (para página de detalle)
+              </Label>
+              <Textarea
+                id="edit-fullDescription"
+                value={formData.fullDescription}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    fullDescription: e.target.value,
+                  }))
+                }
+                placeholder="Descripción detallada que aparecerá en la página de detalle de la maravilla"
+                rows={4}
               />
             </div>
 
