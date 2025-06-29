@@ -61,6 +61,38 @@ export const WondersSection = () => {
    */
   const handleMouseUp = () => {
     setIsDragging(false);
+
+    // Centrar la tarjeta más visible después del arrastre
+    if (carouselRef.current) {
+      setTimeout(() => {
+        centerNearestCard();
+      }, 100);
+    }
+  };
+
+  /**
+   * Centra la tarjeta más cercana al centro
+   */
+  const centerNearestCard = () => {
+    if (!carouselRef.current) return;
+
+    const carousel = carouselRef.current;
+    const cardWidth = 320; // w-80 = 320px
+    const containerWidth = carousel.clientWidth;
+    const scrollLeft = carousel.scrollLeft;
+
+    // Calcular qué tarjeta está más cerca del centro
+    const centerPosition = scrollLeft + containerWidth / 2;
+    const nearestCardIndex = Math.round(centerPosition / cardWidth);
+
+    // Scroll hacia esa tarjeta
+    const targetScrollLeft =
+      nearestCardIndex * cardWidth - containerWidth / 2 + cardWidth / 2;
+
+    carousel.scrollTo({
+      left: Math.max(0, targetScrollLeft),
+      behavior: "smooth",
+    });
   };
 
   /**
@@ -161,7 +193,7 @@ export const WondersSection = () => {
               <Card
                 key={wonder.id}
                 className={cn(
-                  "flex-shrink-0 w-80 sm:w-96 transform transition-all duration-300",
+                  "flex-shrink-0 w-80 sm:w-96 transform transition-all duration-300 border-0 shadow-lg",
                   !isDragging &&
                     "hover:scale-105 hover:shadow-xl cursor-pointer",
                 )}
