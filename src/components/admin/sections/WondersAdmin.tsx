@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { Plus, Edit, Trash2, EyeOff, Upload, Globe } from "lucide-react";
 import type { Wonder } from "@/lib/adminStorage";
