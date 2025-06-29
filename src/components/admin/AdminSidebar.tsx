@@ -79,11 +79,11 @@ export const AdminSidebar = ({
   return (
     <>
       {/* Mobile menu button */}
-      <div className="lg:hidden fixed top-4 left-4 z-50">
+      <div className="lg:hidden fixed top-6 right-4 z-50">
         <Button
           onClick={() => setIsMobileOpen(true)}
           size="sm"
-          className="bg-park-blue hover:bg-park-blue-dark text-white"
+          className="bg-park-blue hover:bg-park-blue-dark text-white shadow-lg"
         >
           <Menu className="w-4 h-4" />
         </Button>
