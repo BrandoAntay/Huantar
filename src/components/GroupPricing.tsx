@@ -139,11 +139,8 @@ export const GroupPricing = () => {
           {/* Lado izquierdo - Carrusel */}
           <div className="relative">
             <div
-              className="relative h-80 sm:h-96 rounded-2xl overflow-hidden shadow-2xl select-none"
+              className="relative h-80 sm:h-96 rounded-2xl overflow-hidden shadow-2xl select-none cursor-grab active:cursor-grabbing"
               onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUp}
-              onMouseLeave={handleMouseUp}
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
